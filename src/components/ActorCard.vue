@@ -1,6 +1,8 @@
 <template>
   <div class="actor-card" @click="handleClick">
     <h3>{{ actor.name }}</h3>
+    <button @click.stop="edit()">Éditer</button>
+    <button @click.stop="remove()">Supprimer</button>
   </div>
 </template>
 
@@ -12,6 +14,12 @@ export default {
   methods: {
     handleClick() {
       this.$emit('click');
+    },
+    edit() {
+      this.$emit('edit', this.actor);
+    },
+    remove() { // Changer delete() en remove()
+      this.$emit('delete', this.actor.id);
     }
   }
 };
