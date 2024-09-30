@@ -1,6 +1,6 @@
 <template>
   <div class="movie-card" @click="handleClick">
-    <img :src="require(`@/assets/movie.jpg`)" alt="Movie Cover" class="movie-image" />
+    <img src="/src/assets/movie.jpg" alt="Movie Cover" class="movie-image" />
     <h3>{{ movie.title }}</h3>
     <p>{{ movie.description }}</p>
   </div>

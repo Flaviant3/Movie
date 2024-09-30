@@ -45,6 +45,7 @@
 import ActorCard from './ActorCard.vue';
 import Pagination from './Pagination.vue';
 import PopinConfirmation from './PopinConfirmation.vue';
+import { getActors } from '../services/actorService'; // Importez le service
 
 export default {
   components: {
@@ -110,18 +111,8 @@ export default {
       this.currentPage = page;
     }
   },
-  created() {
-    // Remplacer par votre logique pour récupérer les acteurs
-    this.actors = [
-      { id: 1, name: 'Acteur 1' },
-      { id: 2, name: 'Acteur 2' },
-      { id: 3, name: 'Acteur 3' },
-      { id: 4, name: 'Acteur 4' },
-      { id: 5, name: 'Acteur 5' },
-      { id: 6, name: 'Acteur 6' },
-      { id: 7, name: 'Acteur 7' },
-      { id: 8, name: 'Acteur 8' }
-    ];
+  async created() {
+    this.actors = await getActors(); // Récupération des acteurs depuis l'API
   }
 };
 </script>

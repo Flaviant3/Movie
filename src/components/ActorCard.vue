@@ -1,6 +1,6 @@
 <template>
   <div class="actor-card" @click="handleClick">
-    <img :src="require(`@/assets/actor.jpg`)" alt="Actor Cover" class="actor-image" />
+    <img src="/src/assets/actor.jpg" alt="Actor Cover" class="actor-image" />
     <h3>{{ actor.name }}</h3>
     <button @click.stop="edit()">Éditer</button>
     <button @click.stop="remove()">Supprimer</button>
