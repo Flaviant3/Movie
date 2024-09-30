@@ -1,146 +1,98 @@
 <template>
-  <div class="categories-page">
-    <h1>Catégories de Films</h1>
-
-    <input type="text" v-model="searchQuery" placeholder="Rechercher par nom de catégorie" />
-
-    <button @click="showAddCategoryForm = !showAddCategoryForm">
-      {{ showAddCategoryForm ? 'Annuler' : 'Ajouter une catégorie' }}
-    </button>
-
-    <div v-if="showAddCategoryForm">
-      <h2>Ajouter une catégorie</h2>
-      <form @submit.prevent="addCategory">
-        <input type="text" v-model="newCategory.name" placeholder="Nom de la catégorie" required />
-        <button type="submit">Ajouter</button>
-      </form>
-    </div>
-
+  <div>
+    <h1>Liste des Catégories</h1>
+    <input
+      type="text"
+      v-model="searchQuery"
+      placeholder="Rechercher une catégorie..."
+      class="search-input"
+    />
     <div class="categories-list">
       <CategoryCard
-        v-for="category in paginatedCategories"
+        v-for="category in filteredCategories"
         :key="category.id"
         :category="category"
-        @click.native="goToCategoryDetails(category.id)"
-        @edit="editCategory(category)"
-        @delete="confirmDelete(category)"
+        @click="handleCategoryClick(category)"
       />
     </div>
-
-    <pagination
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      @change-page="changePage"
-    />
-
-    <popin-confirmation
-      v-if="showConfirmation"
-      @confirm="deleteCategory"
-      @cancel="showConfirmation = false"
-    />
   </div>
 </template>
 
 <script>
-import CategoryCard from './CategoryCard.vue';
-import Pagination from './Pagination.vue';
-import PopinConfirmation from './PopinConfirmation.vue';
+import { getCategories } from '../services/categoryService'; // Service pour récupérer les catégories
+import CategoryCard from './CategoryCard.vue'; // Importer le composant CategoryCard
 
 export default {
   components: {
-    CategoryCard,
-    Pagination,
-    PopinConfirmation
+    CategoryCard
   },
   data() {
     return {
-      searchQuery: '',
-      categories: [], // Remplir avec la liste des catégories
-      newCategory: {
-        name: ''
-      },
-      showAddCategoryForm: false,
-      currentPage: 1,
-      itemsPerPage: 5,
-      showConfirmation: false,
-      categoryToDelete: null
+      categories: [],
+      searchQuery: '' // Ajout d'une propriété pour la recherche
     };
+  },
+  async created() {
+    this.categories = await getCategories(); // Charger les catégories au moment de la création
   },
   computed: {
     filteredCategories() {
-      return this.categories.filter(category =>
-        category.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
-    paginatedCategories() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      return this.filteredCategories.slice(start, start + this.itemsPerPage);
-    },
-    totalPages() {
-      return Math.ceil(this.filteredCategories.length / this.itemsPerPage);
+      // Filtrer les catégories en fonction de la recherche
+      return this.categories.filter(category => {
+        return category.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
     }
   },
   methods: {
-    goToCategoryDetails(categoryId) {
-      this.$router.push({ name: 'CategoryDetails', params: { id: categoryId } });
-    },
-    addCategory() {
-      const newId = this.categories.length + 1; // Remplacer par une logique d'ID unique
-      this.categories.push({ id: newId, ...this.newCategory });
-      this.resetNewCategory();
-      this.showAddCategoryForm = false;
-    },
-    resetNewCategory() {
-      this.newCategory = { name: '' };
-    },
-    editCategory(category) {
-      this.newCategory = { ...category };
-      this.showAddCategoryForm = true;
-    },
-    confirmDelete(category) {
-      // Vérifiez si la catégorie est liée à des films
-      if (this.isCategoryLinkedToMovies(category)) {
-        alert('Cette catégorie ne peut pas être supprimée car elle est liée à un ou plusieurs films.');
-        return;
-      }
-      this.categoryToDelete = category.id;
-      this.showConfirmation = true;
-    },
-    deleteCategory() {
-      this.categories = this.categories.filter(category => category.id !== this.categoryToDelete);
-      this.showConfirmation = false;
-      this.categoryToDelete = null;
-    },
-    changePage(page) {
-      this.currentPage = page;
-    },
-    isCategoryLinkedToMovies(category) {
-      // Remplacer par votre logique pour vérifier si la catégorie est liée à des films
-      // Par exemple, vous pourriez avoir une liste de films avec une propriété categoryId
-      return false; // Placeholder, à remplacer par la vraie logique
+    handleCategoryClick(category) {
+      // Logique à exécuter lors du clic sur une carte de catégorie
+      console.log('Catégorie cliquée:', category);
+      this.$router.push({ name: 'CategoryDetails', params: { id: category.id } }); // Navigation vers les détails de la catégorie
     }
-  },
-  created() {
-    // Remplacer par votre logique pour récupérer les catégories
-    this.categories = [
-      { id: 1, name: 'Action' },
-      { id: 2, name: 'Comédie' },
-      { id: 3, name: 'Drame' },
-      { id: 4, name: 'Science-fiction' },
-      { id: 5, name: 'Horreur' },
-      { id: 6, name: 'Documentaire' }
-    ];
   }
 };
 </script>
 
-<style scoped>
-.categories-page {
-  padding: 20px;
-}
+<style>
 .categories-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
+  gap: 20px; /* Espace entre les cartes */
+  padding: 20px; /* Padding autour de la grille */
+}
+
+.category-card {
+  background-color: #fefefe; /* Fond légèrement gris */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s; /* Transition pour l'effet */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Pour éviter que le contenu déborde */
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
+}
+
+.search-input {
+  width: 100%; /* Largeur 100% pour le champ de recherche */
+  padding: 10px; /* Espacement intérieur */
+  margin-bottom: 20px; /* Marge en bas */
+  border: 1px solid #ccc; /* Bordure */
+  border-radius: 5px; /* Coins arrondis */
+  font-size: 1em; /* Taille de la police */
+}
+
+h3 {
+  margin: 10px 0 5px; /* Marges pour le titre */
+  font-size: 1.2em; /* Taille de police du titre */
+}
+
+p {
+  margin: 0 0 10px; /* Marges pour la description */
+  font-size: 0.9em; /* Taille de police pour la description */
+  color: #555; /* Couleur de texte pour la description */
 }
 </style>
