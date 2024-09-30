@@ -1,6 +1,6 @@
 <template>
   <div class="actors-page">
-    <h1>Acteurs</h1>
+    <h1>Liste des Acteurs</h1>
 
     <input type="text" v-model="searchQuery" placeholder="Rechercher par nom d'acteur" />
 
@@ -16,16 +16,14 @@
       </form>
     </div>
 
-    <div class="actors-list">
-      <ActorCard
-        v-for="actor in paginatedActors"
-        :key="actor.id"
-        :actor="actor"
-        @click.native="goToActorDetails(actor.id)"
-        @edit="editActor(actor)"
-        @delete="confirmDelete(actor.id)"
-      />
-    </div>
+    <ul class="actors-list">
+      <li v-for="actor in paginatedActors" :key="actor.id">
+        <h2>{{ actor.name }}</h2>
+        <p>Films: {{ actor.movies.join(', ') }}</p>
+        <button @click="editActor(actor)">Modifier</button>
+        <button @click="confirmDelete(actor.id)">Supprimer</button>
+      </li>
+    </ul>
 
     <pagination
       :current-page="currentPage"
@@ -42,21 +40,19 @@
 </template>
 
 <script>
-import ActorCard from './ActorCard.vue';
+import { getActors } from '../services/actorService';
 import Pagination from './Pagination.vue';
 import PopinConfirmation from './PopinConfirmation.vue';
-import { getActors } from '../services/actorService'; // Importez le service
 
 export default {
   components: {
-    ActorCard,
     Pagination,
     PopinConfirmation
   },
   data() {
     return {
       searchQuery: '',
-      actors: [], // Remplir avec la liste des acteurs
+      actors: [],
       newActor: {
         name: ''
       },
@@ -82,27 +78,29 @@ export default {
     }
   },
   methods: {
-    goToActorDetails(actorId) {
-      this.$router.push({ name: 'ActorDetails', params: { id: actorId } });
-    },
-    addActor() {
-      const newId = this.actors.length + 1; // Remplacer par une logique d'ID unique
-      this.actors.push({ id: newId, ...this.newActor });
+    async addActor() {
+      // Logique pour ajouter un acteur via l'API
+      const newActorData = { name: this.newActor.name };
+      // Remplacez ceci par votre logique d'appel API pour ajouter un acteur
+      const addedActor = await this.$api.addActor(newActorData); // Exemple d'appel API
+      this.actors.push(addedActor);
       this.resetNewActor();
       this.showAddActorForm = false;
     },
     resetNewActor() {
-      this.newActor = { name: '' };
+      this.newActor = {name: ''};
     },
     editActor(actor) {
-      this.newActor = { ...actor };
+      this.newActor = {...actor};
       this.showAddActorForm = true;
     },
     confirmDelete(actorId) {
       this.actorToDelete = actorId;
       this.showConfirmation = true;
     },
-    deleteActor() {
+    async deleteActor() {
+      // Logique pour supprimer un acteur via l'API
+      await this.$api.deleteActor(this.actorToDelete); // Exemple d'appel API
       this.actors = this.actors.filter(actor => actor.id !== this.actorToDelete);
       this.showConfirmation = false;
       this.actorToDelete = null;
@@ -121,9 +119,13 @@ export default {
 .actors-page {
   padding: 20px;
 }
+
 .actors-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.actors-list li {
+  margin-bottom: 20px;
 }
 </style>

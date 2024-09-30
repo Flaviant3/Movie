@@ -29,5 +29,11 @@ export default {
 </script>
 
 <style>
-/* Ajoutez du style ici si nécessaire */
+img {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
+}
 </style>
