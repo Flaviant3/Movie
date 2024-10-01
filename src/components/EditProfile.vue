@@ -21,14 +21,6 @@
           <button type="submit">Update</button>
         </form>
       </div>
-      <div class="overlay-container">
-        <div class="overlay">
-          <div class="overlay-panel overlay-right">
-            <h1>Hello, Friend!</h1>
-            <p>Enter your personal details and start your journey with us</p>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -63,6 +55,8 @@ export default {
         const data = await response.json();
         if (response.ok) {
           alert('Account created successfully!');
+          // Stocker l'ID de l'utilisateur dans le localStorage
+          localStorage.setItem('userId', data.id); // Assurez-vous que l'ID est renvoyé par l'API
           // Réinitialiser le formulaire ou rediriger l'utilisateur
         } else {
           alert(data.message || 'Error creating account');
@@ -73,7 +67,7 @@ export default {
     },
     async updateProfile() {
       try {
-        const userId = 3; // Assurez-vous que l'ID de l'utilisateur est correctement défini
+        const userId = localStorage.getItem('userId'); // Récupérer l'ID de l'utilisateur
         const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users/${userId}`, {
           method: 'PATCH',
           headers: {
@@ -97,7 +91,8 @@ export default {
         alert('Error updating profile');
       }
     }
-  },
+
+},
 };
 </script>
 

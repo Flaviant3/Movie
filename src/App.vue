@@ -6,7 +6,7 @@
       <router-link to="/movies">Movies</router-link>
       <router-link to="/actors">Actors</router-link>
       <router-link to="/categories">Categories</router-link>
-      <router-link to="/edit-profile" style="float: right;">Edit Profile / Logout</router-link>
+      <router-link to="/edit-profile" style="float: right;">Modifier Profil</router-link>
     </nav>
     <router-view></router-view>
   </div>

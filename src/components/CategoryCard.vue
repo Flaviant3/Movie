@@ -1,8 +1,6 @@
 <template>
   <div class="category-card" @click="handleClick">
-    <img :src="category.media" alt="Image de la catégorie" class="category-image" />
-    <h3>{{ category.name }}</h3>
-    <p>Description : {{ category.description }}</p>
+    <h3>{{ category.title }}</h3>
   </div>
 </template>
 
@@ -38,17 +36,6 @@ export default {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.category-image {
-  width: 100%;
-  height: 200px; /* Ajustement de la hauteur pour un meilleur affichage */
-  object-fit: cover; /* Remplit l'espace sans déformer l'image */
-  border-radius: 10px; /* Coins arrondis */
-  transition: transform 0.3s;
-}
-
-.category-image:hover {
-  transform: scale(1.05); /* Zoom léger sur l'image au survol */
-}
 
 h3 {
   font-size: 1.5em;
