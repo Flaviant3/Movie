@@ -21,6 +21,5 @@ export default new Router({
     { path: '/actors', name: 'Actors', component: Actors },
     { path: '/categories', name: 'Categories', component: Categories },
     { path: '/edit-profile', name: 'EditProfile', component: EditProfile },
-    { path: '/login', name: 'Login', component: Login },
   ]
 });
