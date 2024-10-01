@@ -1,9 +1,13 @@
 <template>
   <div class="actor-card" @click="handleClick">
-    <img src="/src/assets/actor.jpg" alt="Actor Cover" class="actor-image" />
-    <h3>{{ actor.name }}</h3>
-    <button @click.stop="edit()">Éditer</button>
-    <button @click.stop="remove()">Supprimer</button>
+    <img :src="actor.media" alt="Photo de l'acteur" class="actor-image" />
+    <h3>{{ actor.lastname }}</h3>
+    <p>Date de naissance : {{ formattedBirthDate }}</p>
+    <p>Nationalité : {{ actor.nationality }}</p>
+    <p>{{ actor.bio }}</p>
+    <div class="rating">
+      <span v-for="star in maxStars" :key="star" class="star" :class="{ filled: star <= actor.rating }">★</span>
+    </div>
   </div>
 </template>
 
@@ -12,15 +16,18 @@ export default {
   props: {
     actor: Object
   },
+  computed: {
+    formattedBirthDate() {
+      const options = {year: 'numeric', month: 'long', day: 'numeric'};
+      return new Date(this.actor.dob).toLocaleDateString('fr-FR', options);
+    },
+    maxStars() {
+      return 5; // Nombre maximum d'étoiles
+    }
+  },
   methods: {
     handleClick() {
       this.$emit('click');
-    },
-    edit() {
-      this.$emit('edit', this.actor);
-    },
-    remove() {
-      this.$emit('delete', this.actor.id);
     }
   }
 };
@@ -28,23 +35,70 @@ export default {
 
 <style scoped>
 .actor-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
+  border: none;
+  padding: 20px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform 0.2s;
-  background-color: #fefefe; /* Fond légèrement gris */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
 }
 
 .actor-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .actor-image {
-  width: 100%; /* Largeur 100% pour remplir la carte */
-  height: 200px; /* Hauteur fixe pour l'image */
-  object-fit: cover; /* Garde le ratio d'aspect */
-  border-radius: 5px 5px 0 0; /* Coins arrondis en haut */
+  width: 100%;
+  height: 200px; /* Ajustement de la hauteur pour un meilleur affichage */
+  object-fit: cover; /* Remplit l'espace sans déformer l'image */
+  border-radius: 50%; /* Rendre l'image complètement ronde */
+  transition: transform 0.3s;
+}
+
+.actor-image:hover {
+  transform: scale(1.05); /* Zoom léger sur l'image au survol */
+}
+
+h3 {
+  font-size: 1.5em;
+  margin: 10px 0;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  margin: 5px 0;
+  color: #555;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.rating {
+  margin-top: 10px; /* Espace au-dessus de la note */
+  text-align: center;
+}
+
+.star {
+  color: #ccc; /* Couleur par défaut des étoiles */
+  font-size: 1.2em;
+}
+
+.star.filled {
+  color: #ffcc00; /* Couleur des étoiles remplies */
+}
+
+.star:hover {
+  cursor: pointer;
+  color: #ffcc00; /* Couleur survolée */
+}
+
+/* Ajout d'une animation pour les étoiles */
+.star {
+  transition: color 0.2s;
 }
 </style>

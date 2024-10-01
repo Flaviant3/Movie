@@ -33,7 +33,7 @@ export default {
     };
   },
   async created() {
-    this.categories = await getCategories(); // Charger les catégories au moment de la création
+    this.categories = await getCategories(); // Récupérer la liste des catégories
   },
   computed: {
     filteredCategories() {
@@ -47,33 +47,32 @@ export default {
     handleCategoryClick(category) {
       // Logique à exécuter lors du clic sur une carte de catégorie
       console.log('Catégorie cliquée:', category);
-      this.$router.push({ name: 'CategoryDetails', params: { id: category.id } }); // Navigation vers les détails de la catégorie
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 .categories-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
-  gap: 20px; /* Espace entre les cartes */
+  gap: 15px; /* Espace entre les cartes */
   padding: 20px; /* Padding autour de la grille */
 }
 
 .category-card {
   background-color: #fefefe; /* Fond légèrement gris */
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: none; /* Suppression de la bordure pour un look plus moderne */
+  border-radius: 8px; /* Coins arrondis */
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s; /* Transition pour l'effet */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s; /* Transition pour l'effet */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
   overflow: hidden; /* Pour éviter que le contenu déborde */
 }
 
 .category-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
+  transform: scale(1.05); /* Légère augmentation de taille au survol */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
 }
 
 .search-input {
@@ -85,14 +84,8 @@ export default {
   font-size: 1em; /* Taille de la police */
 }
 
-h3 {
-  margin: 10px 0 5px; /* Marges pour le titre */
-  font-size: 1.2em; /* Taille de police du titre */
-}
-
-p {
-  margin: 0 0 10px; /* Marges pour la description */
-  font-size: 0.9em; /* Taille de police pour la description */
-  color: #555; /* Couleur de texte pour la description */
+h1 {
+  text-align: center; /* Alignement centré pour le titre */
+  margin-bottom: 20px; /* Marge en bas du titre */
 }
 </style>

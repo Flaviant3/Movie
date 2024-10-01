@@ -37,32 +37,56 @@ export default {
 
 <style scoped>
 .movie-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
+  border: none;
+  padding: 20px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform 0.2s;
-  background-color: #fefefe;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .movie-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .movie-image {
   width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 5px 5px 0 0;
+  height: 200px; /* Ajustement de la hauteur pour un meilleur affichage */
+  object-fit: cover; /* Remplit l'espace sans déformer l'image */
+  border-radius: 10px 10px 0 0;
+  transition: transform 0.3s;
+}
+
+.movie-image:hover {
+  transform: scale(1.05); /* Zoom léger sur l'image au survol */
+}
+
+h3 {
+  font-size: 1.5em;
+  margin: 10px 0;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  margin: 5px 0;
+  color: #555;
+  line-height: 1.5;
+  text-align: center;
 }
 
 .rating {
-  margin-top: 5px; /* Espace au-dessus de la note */
+  margin-top: 10px; /* Espace au-dessus de la note */
+  text-align: center;
 }
 
 .star {
   color: #ccc; /* Couleur par défaut des étoiles */
+  font-size: 1.2em;
 }
 
 .star.filled {
@@ -71,5 +95,12 @@ export default {
 
 .star:hover {
   cursor: pointer;
+  color: #ffcc00; /* Couleur survolée */
+}
+
+/* Ajout d'une animation pour les étoiles */
+.star {
+  transition: color 0.2s;
 }
 </style>
+

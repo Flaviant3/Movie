@@ -52,34 +52,34 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .movies-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
-  gap: 20px; /* Espace entre les cartes */
+  gap: 15px; /* Espace entre les cartes */
   padding: 20px; /* Padding autour de la grille */
 }
 
 .movie-card {
   background-color: #fefefe; /* Fond légèrement gris */
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: none; /* Suppression de la bordure pour un look plus moderne */
+  border-radius: 8px; /* Coins arrondis */
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s; /* Transition pour l'effet */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s; /* Transition pour l'effet */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
   overflow: hidden; /* Pour éviter que le contenu déborde */
 }
 
 .movie-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
+  transform: scale(1.05); /* Légère augmentation de taille au survol */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
 }
 
 .movie-image {
   width: 100%; /* Largeur 100% pour remplir la carte */
-  height: 300px; /* Hauteur fixe pour l'image en format portrait */
+  height: 180px; /* Hauteur réduite pour un affichage compact */
   object-fit: cover; /* Garde le ratio d'aspect */
-  border-radius: 5px 5px 0 0; /* Coins arrondis en haut */
+  border-radius: 8px 8px 0 0; /* Coins arrondis en haut */
 }
 
 .search-input {
@@ -93,13 +93,14 @@ export default {
 
 h3 {
   margin: 10px 0 5px; /* Marges pour le titre */
-  font-size: 1.2em; /* Taille de police du titre */
+  font-size: 1em; /* Taille de police du titre réduite */
+  text-align: center; /* Alignement centré */
 }
 
 p {
   margin: 0 0 10px; /* Marges pour la description */
-  font-size: 0.9em; /* Taille de police pour la description */
+  font-size: 0.8em; /* Taille de police pour la description réduite */
   color: #555; /* Couleur de texte pour la description */
+  text-align: center; /* Alignement centré */
 }
 </style>
-
