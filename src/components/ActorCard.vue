@@ -62,6 +62,7 @@ export default {
 
 .actor-image:hover {
   transform: scale(1.05); /* Zoom léger sur l'image au survol */
+
 }
 
 h3 {

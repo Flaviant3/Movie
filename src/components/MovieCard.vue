@@ -2,7 +2,7 @@
   <div class="movie-card" @click="handleClick">
     <img :src="movie.media" alt="Movie Cover" class="movie-image" />
     <h3>{{ movie.title }}</h3>
-    <p>Date de sortie : {{ formattedReleaseDate }}</p>
+    <p>Date de sortie : {{ movie.runtime }}</p>
     <p>Durée : {{ movie.duration }} minutes</p>
     <div class="rating">
       <span v-for="star in maxStars" :key="star" class="star" :class="{ filled: star <= movie.rating }">★</span>
