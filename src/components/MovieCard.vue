@@ -4,9 +4,6 @@
     <h3>{{ movie.title }}</h3>
     <p>Date de sortie : {{ formattedReleaseDate }}</p>
     <p>Durée : {{ movie.duration }} minutes</p>
-    <p>Réalisateur : {{ movie.director }}</p>
-    <p>Nombre d'entrées : {{ movie.entries }}</p>
-    <p>{{ movie.description }}</p>
     <div class="rating">
       <span v-for="star in maxStars" :key="star" class="star" :class="{ filled: star <= movie.rating }">★</span>
     </div>
@@ -55,8 +52,9 @@ export default {
 
 .movie-image {
   width: 100%;
-  height: 200px; /* Ajustement de la hauteur pour un meilleur affichage */
-  object-fit: cover; /* Remplit l'espace sans déformer l'image */
+  height: auto; /* Hauteur automatique pour garder les proportions */
+  max-height: 600px; /* Hauteur maximale pour éviter que l'image ne soit trop grande */
+  object-fit: contain; /* Remplit l'espace sans déformer l'image et sans la couper */
   border-radius: 10px 10px 0 0;
   transition: transform 0.3s;
 }
@@ -103,4 +101,3 @@ p {
   transition: color 0.2s;
 }
 </style>
-

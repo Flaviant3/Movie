@@ -1,23 +1,25 @@
+// services/api.js
 import axios from 'axios';
 
-const API_URL = 'http://symfony.mmi-troyes.fr:8319/api'; // Remplacez par l'URL de votre API
+const API_URL_MOVIES = 'http://symfony.mmi-troyes.fr:8319/api/movies';
+const API_URL_ACTORS = 'http://symfony.mmi-troyes.fr:8319/api/actors';
 
 export const fetchLatestMovies = async () => {
   try {
-    const response = await axios.get(`${API_URL}/movies/latest`); // Assurez-vous que ce point de terminaison existe
-    return response.data; // Retourne les données des films
+    const response = await axios.get(API_URL_MOVIES);
+    return response.data['hydra:member'] || [];
   } catch (error) {
-    console.error('Erreur lors de la récupération des films:', error);
-    throw error; // Propager l'erreur
+    console.error('Erreur lors de la récupération des derniers films:', error);
+    return [];
   }
 };
 
-export class api {
-  static async get(s) {
-
+export const fetchLatestActors = async () => {
+  try {
+    const response = await axios.get(API_URL_ACTORS);
+    return response.data['hydra:member'] || [];
+  } catch (error) {
+    console.error('Erreur lors de la récupération des derniers acteurs:', error);
+    return [];
   }
-
-  static async post(s, movie) {
-
-  }
-}
+};
