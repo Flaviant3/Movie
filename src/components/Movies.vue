@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { getMovies } from '../services/movieService';
+import {getMovies} from '../services/movieService';
 import MovieCard from './MovieCard.vue'; // Importer le composant MovieCard
 
 export default {
@@ -45,8 +45,8 @@ export default {
   },
   methods: {
     handleMovieClick(movie) {
-      // Logique à exécuter lors du clic sur une carte de film
-      console.log('Film cliqué:', movie);
+      // Rediriger vers les détails du film
+      this.$router.push({name: 'MovieDetails', params: {id: movie.id}});
     }
   }
 };

@@ -1,9 +1,9 @@
 <template>
   <div class="homepage">
-    <h1>WR505D Projet Movie.vue</h1>
+    <h1>Derniers Films</h1>
 
     <section class="carousel">
-      <div class="carousel-images" :style="{ transform: `translateX(-${currentIndex * 50}%)` }"> <!-- Ajustement ici -->
+      <div class="carousel-images" :style="{ transform: `translateX(-${currentIndex * 50}%)` }">
         <MovieCard
           v-for="movie in latestMovies"
           :key="movie.id"
@@ -27,8 +27,6 @@
   </div>
 </template>
 
-
-
 <script>
 import MovieCard from './MovieCard.vue';
 import ActorCard from './ActorCard.vue';
@@ -41,9 +39,9 @@ export default {
   },
   data() {
     return {
-      latestMovies: [], // Remplir avec les 4 derniers films
-      latestActors: [], // Remplir avec les 4 derniers acteurs
-      currentIndex: 0 // Index de l'image actuelle
+      latestMovies: [],
+      latestActors: [],
+      currentIndex: 0
     };
   },
   methods: {
@@ -56,7 +54,7 @@ export default {
     async loadLatestMovies() {
       try {
         const movies = await fetchLatestMovies();
-        this.latestMovies = movies.slice(0, 4); // Prendre les 4 derniers films
+        this.latestMovies = movies.slice(0, 4);
       } catch (error) {
         console.error('Erreur lors du chargement des films:', error);
       }
@@ -64,7 +62,7 @@ export default {
     async loadLatestActors() {
       try {
         const actors = await fetchLatestActors();
-        this.latestActors = actors.slice(0, 4); // Prendre les 4 derniers acteurs
+        this.latestActors = actors.slice(0, 4);
       } catch (error) {
         console.error('Erreur lors du chargement des acteurs:', error);
       }
@@ -74,19 +72,20 @@ export default {
     }
   },
   created() {
-    this.loadLatestMovies(); // Charger les films lors de la création du composant
-    this.loadLatestActors(); // Charger les acteurs lors de la création du composant
-    setInterval(this.updateCarousel, 5000); // Mettre à jour le carrousel toutes les 5 secondes
+    this.loadLatestMovies();
+    this.loadLatestActors();
+    setInterval(this.updateCarousel, 5000);
   }
 };
 </script>
 
 <style scoped>
 .homepage {
-  color: #ffffff; /* Texte blanc pour le contraste */
-  margin: 0; /* Enlever les marges par défaut */
-  padding: 0; /* Enlever le padding par défaut */
-  overflow: hidden; /* Masquer les débordements */
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #141414; /* Fond sombre pour correspondre à la navbar */
 }
 
 h1 {
@@ -104,67 +103,74 @@ h2 {
 
 .carousel {
   position: relative;
-  overflow: hidden; /* Masquer les débordements */
-  height: 100vh; /* Hauteur fixe pour le carrousel (100% de la hauteur de la fenêtre) */
-  border-radius: 0; /* Pas de coins arrondis */
-  margin-bottom: 20px; /* Espace en bas du carrousel */
+  overflow: hidden;
+  height: 80vh; /* Ajuster la hauteur du carrousel */
+  border-radius: 0;
+  margin-bottom: 20px;
 }
 
 .carousel-images {
-  display: flex; /* Alignement horizontal des images */
-  transition: transform 0.5s ease; /* Transition pour le défilement */
-  width: 200%; /* S'assurer que le conteneur prend deux fois la largeur pour deux cartes */
-  height: 100%; /* S'assurer que le conteneur prend toute la hauteur */
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 200%;
+  height: 100%;
 }
 
 .movie-card {
-  width: 50%; /* Chaque carte prend 50% de la largeur du carrousel */
+  width: 50%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centrer le contenu */
-  padding: 0; /* Pas d'espacement interne pour maximiser l'espace */
-  height: 100%; /* Hauteur de la carte pour remplir le carrousel */
+  align-items: center;
+  padding: 0;
+  height: 100%;
 }
 
 .movie-image {
-  width: 100%; /* Largeur 100% pour remplir la carte */
-  height: 100%; /* Hauteur 100% pour remplir la carte */
-  object-fit: cover; /* Remplit l'espace sans déformer l'image */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 10px 10px 0 0;
   transition: transform 0.3s;
 }
 
 .movie-image:hover {
-  transform: scale(1.05); /* Zoom léger sur l'image au survol */
+  transform: scale(1.05);
 }
 
 h3 {
   font-size: 1.5em;
   margin: 10px 0;
-  color: #333;
+  color: #ffffff; /* Texte blanc pour le titre du film */
   text-align: center;
 }
 
 p {
   margin: 5px 0;
-  color: #555;
+  color: #dddddd; /* Texte gris clair pour les descriptions */
   line-height: 1.5;
   text-align: center;
 }
 
 .actors-section {
-  padding: 20px; /* Espacement autour de la section des acteurs */
+  padding: 20px;
   background-color: #222; /* Fond sombre pour la section des acteurs */
 }
 
 .actors-list {
-  display: flex; /* Afficher les acteurs sur une seule ligne */
-  overflow-x: auto; /* Permettre le défilement horizontal */
-  padding: 10px 0; /* Espacement vertical */
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
 }
 
 .actor-card {
-  margin-right: 10px; /* Espace entre les cartes d'acteurs */
+  margin-right: 10px;
+  background-color: #333; /* Fond sombre pour les cartes d'acteurs */
+  border-radius: 5px;
+  padding: 10px;
+  transition: transform 0.3s;
+}
+
+.actor-card:hover {
+  transform: scale(1.05); /* Effet de zoom au survol */
 }
 </style>
-

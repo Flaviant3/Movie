@@ -15,6 +15,7 @@
 
 <script>
 import MovieCard from './MovieCard.vue';
+import { fetchActorDetails } from '../services/api'; // Assurez-vous d'importer la fonction
 
 export default {
   components: {
@@ -28,19 +29,18 @@ export default {
   methods: {
     goToMovieDetails(movieId) {
       this.$router.push({ name: 'MovieDetails', params: { id: movieId } });
+    },
+    async loadActorDetails(actorId) {
+      try {
+        this.actor = await fetchActorDetails(actorId); // Récupérer les détails de l'acteur
+      } catch (error) {
+        console.error('Erreur lors du chargement des détails de l\'acteur:', error);
+      }
     }
   },
   created() {
     const actorId = this.$route.params.id;
-    // Remplacer par votre logique pour récupérer les détails de l'acteur
-    this.actor = {
-      id: actorId,
-      name: 'Acteur ' + actorId,
-      movies: [
-        { id: 1, title: 'Film 1' },
-        { id: 2, title: 'Film 2' }
-      ]
-    };
+    this.loadActorDetails(actorId); // Charger les détails de l'acteur lors de la création du composant
   }
 };
 </script>

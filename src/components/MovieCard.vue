@@ -2,7 +2,7 @@
   <div class="movie-card" @click="handleClick">
     <img :src="movie.media" alt="Movie Cover" class="movie-image" />
     <h3>{{ movie.title }}</h3>
-    <p>Date de sortie : {{ movie.runtime }}</p>
+    <p>Date de sortie : {{ formattedReleaseDate }}</p>
     <p>Durée : {{ movie.duration }} minutes</p>
     <div class="rating">
       <span v-for="star in maxStars" :key="star" class="star" :class="{ filled: star <= movie.rating }">★</span>
@@ -39,22 +39,22 @@ export default {
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  background-color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: #222; /* Fond sombre pour correspondre à l'esthétique Netflix */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
 }
 
 .movie-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
 }
 
 .movie-image {
   width: 100%;
   height: auto; /* Hauteur automatique pour garder les proportions */
-  max-height: 600px; /* Hauteur maximale pour éviter que l'image ne soit trop grande */
-  object-fit: contain; /* Remplit l'espace sans déformer l'image et sans la couper */
+  max-height: 400px; /* Hauteur maximale pour éviter que l'image ne soit trop grande */
+  object-fit: cover; /* Remplit l'espace sans déformer l'image */
   border-radius: 10px 10px 0 0;
   transition: transform 0.3s;
 }
@@ -66,13 +66,13 @@ export default {
 h3 {
   font-size: 1.5em;
   margin: 10px 0;
-  color: #333;
+  color: #e50914; /* Rouge Netflix pour les titres */
   text-align: center;
 }
 
 p {
   margin: 5px 0;
-  color: #555;
+  color: #ddd; /* Texte gris clair pour les descriptions */
   line-height: 1.5;
   text-align: center;
 }
@@ -83,8 +83,8 @@ p {
 }
 
 .star {
-  color: #ccc; /* Couleur par défaut des étoiles */
-  font-size: 1.2em;
+  color: #555; /* Couleur par défaut des étoiles */
+  font-size: 1.5em; /* Taille des étoiles */
 }
 
 .star.filled {

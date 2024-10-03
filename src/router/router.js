@@ -6,7 +6,6 @@ import Movies from '../components/Movies.vue';
 import Actors from '../components/Actors.vue';
 import Categories from '../components/Categories.vue';
 import EditProfile from '../components/EditProfile.vue';
-import Login from '../components/Login.vue';
 import MovieDetails from '../components/MovieDetails.vue';
 import ActorDetails from '../components/ActorDetails.vue';
 

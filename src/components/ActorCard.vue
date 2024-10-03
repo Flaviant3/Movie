@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     formattedBirthDate() {
-      const options = {year: 'numeric', month: 'long', day: 'numeric'};
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(this.actor.dob).toLocaleDateString('fr-FR', options);
     },
     maxStars() {
@@ -40,8 +40,8 @@ export default {
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  background-color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background-color: #222; /* Fond sombre pour correspondre à l'esthétique Netflix */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -49,12 +49,12 @@ export default {
 
 .actor-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
 }
 
 .actor-image {
-  width: 100%;
-  height: 200px; /* Ajustement de la hauteur pour un meilleur affichage */
+  width: 200px;
+  height: 200px; /* Taille de l'image ajustée */
   object-fit: cover; /* Remplit l'espace sans déformer l'image */
   border-radius: 50%; /* Rendre l'image complètement ronde */
   transition: transform 0.3s;
@@ -62,21 +62,18 @@ export default {
 
 .actor-image:hover {
   transform: scale(1.05); /* Zoom léger sur l'image au survol */
-
 }
 
 h3 {
   font-size: 1.5em;
   margin: 10px 0;
-  color: #333;
-  text-align: center;
+  color: #e50914; /* Rouge Netflix pour les titres */
 }
 
 p {
   margin: 5px 0;
-  color: #555;
+  color: #ddd; /* Texte gris clair pour les descriptions */
   line-height: 1.5;
-  text-align: center;
 }
 
 .rating {
@@ -85,8 +82,8 @@ p {
 }
 
 .star {
-  color: #ccc; /* Couleur par défaut des étoiles */
-  font-size: 1.2em;
+  color: #555; /* Couleur par défaut des étoiles */
+  font-size: 1.5em; /* Taille des étoiles */
 }
 
 .star.filled {

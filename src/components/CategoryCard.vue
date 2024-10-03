@@ -1,6 +1,7 @@
 <template>
   <div class="category-card" @click="handleClick">
     <h3>{{ category.title }}</h3>
+    <p class="movies-count">{{ category.moviesCount }} films</p>
   </div>
 </template>
 
@@ -19,34 +20,34 @@ export default {
 
 <style scoped>
 .category-card {
+  background-color: #222; /* Fond sombre pour correspondre à l'esthétique Netflix */
   border: none;
   padding: 20px;
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  background-color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Ombre légère */
   position: relative;
   overflow: hidden;
   text-align: center;
+  color: #ffffff; /* Texte blanc pour un bon contraste */
 }
 
 .category-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px); /* Légère élévation au survol */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7); /* Ombre plus prononcée au survol */
 }
 
-
 h3 {
-  font-size: 1.5em;
+  font-size: 1.5em; /* Taille de police du titre */
   margin: 10px 0;
-  color: #333;
+  color: #e50914; /* Rouge Netflix pour le titre */
   text-align: center;
 }
 
 p {
   margin: 5px 0;
-  color: #555;
+  color: #ddd; /* Couleur de texte pour le nombre de films */
   line-height: 1.5;
   text-align: center;
 }

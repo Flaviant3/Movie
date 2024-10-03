@@ -74,52 +74,96 @@ export default {
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: #141414; /* Fond sombre */
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   font-family: 'Arial', sans-serif;
+  color: #ffffff; /* Texte blanc */
 }
 
 .movie-image {
-  width: 50%;
-  height: auto;
+  width: 300px;
+  height: 400px;
   border-radius: 10px;
   margin-bottom: 20px;
   display: block;
-  margin: auto;
+  border: 2px solid #e50914; /* Bordure rouge Netflix */
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 h3 {
   font-size: 2rem;
-  color: #333;
+  color: #e50914; /* Rouge Netflix */
   margin-bottom: 10px;
   text-align: center;
 }
 
 .info-section {
-  background-color: #ffffff;
+  background-color: #222; /* Fond sombre pour la section info */
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .info-section p {
   font-size: 1rem;
-  color: #555;
+  color: #ddd; /* Texte gris clair */
   margin: 5px 0;
 }
 
 .info-section strong {
-  color: #007bff;
+  color: #e50914; /* Rouge Netflix pour les labels */
 }
 
 h2 {
   font-size: 1.5rem;
-  color: #007bff;
+  color: #e50914; /* Rouge Netflix */
   margin-bottom: 10px;
   text-align: center;
 }
+
+.actors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.actor-card {
+  flex: 1 1 calc(30% - 15px); /* 3 cards par ligne */
+  background-color: #333; /* Fond sombre pour les cartes d'acteurs */
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s; /* Ajout d'une transition */
+}
+
+.actor-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); /* Ombre plus prononcée au survol */
+}
+
+.actor-card img {
+  width: 100px; /* Ajustement de la taille de l'image */
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e50914; /* Bordure rouge Netflix */
+}
+
+.notification {
+  background-color: #4caf50; /* Vert */
+  color: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  text-align: center;
+}
+</style>
+
 
 .actors-list {
   display: flex;
@@ -143,16 +187,9 @@ h2 {
 }
 
 .actor-card img {
-  width: 100%;
-  height: auto;
-  border-radius: 6px;
-}
-
-.actor-image {
-  width: 100%;
-  height: auto;
-  border-radius: 50%; /* Rendre l'image complètement ronde */
-  object-fit: cover; /* Remplit l'espace sans déformer l'image */
-  transition: transform 0.3s;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>
