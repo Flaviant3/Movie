@@ -25,6 +25,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 20px 0;
 }
 button {
   margin: 0 5px;

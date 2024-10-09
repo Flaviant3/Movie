@@ -2,7 +2,52 @@
   <div class="movie-details">
     <img :src="movie.media" alt="Movie Cover" class="movie-image" />
     <h3>{{ movie.title }}</h3>
-    <div class="info-section">
+
+    <div v-if="isEditing" class="edit-form">
+      <h4>Modifier le Film</h4>
+      <form @submit.prevent="updateMovie">
+        <label>
+          Titre :
+          <input type="text" v-model="movie.title" required />
+        </label>
+        <label>
+          Date de sortie :
+          <input type="date" v-model="movie.releaseDate" required />
+        </label>
+        <label>
+          Durée :
+          <input type="number" v-model="movie.duration" required />
+        </label>
+        <label>
+          Studio :
+          <input type="text" v-model="movie.studio" required />
+        </label>
+        <label>
+          Genre :
+          <input type="text" v-model="movie.genre" required />
+        </label>
+        <label>
+          Synopsis :
+          <textarea v-model="movie.description" required></textarea>
+        </label>
+        <label>
+          Saga :
+          <input type="text" v-model="movie.saga" />
+        </label>
+        <label>
+          Note :
+          <input type="number" v-model="movie.rating" min="0" max="5" step="0.1" required />
+        </label>
+        <label>
+          Réalisateur :
+          <input type="text" v-model="movie.director" required />
+        </label>
+        <button type="submit" class="save-button">Sauvegarder</button>
+        <button type="button" @click="isEditing = false" class="cancel-button">Annuler</button>
+      </form>
+    </div>
+
+    <div v-else class="info-section">
       <p><strong>Titre :</strong> {{ movie.title }}</p>
       <p><strong>Date de sortie :</strong> {{ movie.releaseDate }}</p>
       <p><strong>Durée :</strong> {{ movie.duration }} minutes</p>
@@ -12,7 +57,9 @@
       <p><strong>Saga :</strong> {{ movie.saga }}</p>
       <p><strong>Note :</strong> {{ movie.rating }}</p>
       <p><strong>Réalisateur :</strong> {{ movie.director }}</p>
+      <button class="edit-button" @click="isEditing = true">Éditer</button>
     </div>
+
     <h2>Acteurs</h2>
     <div class="actors-list">
       <template v-if="movie.actors && movie.actors.length > 0">
@@ -34,12 +81,13 @@
 </template>
 
 <script>
-import {fetchActorDetails, fetchMovieDetails} from '../services/api';
+import { fetchActorDetails, fetchMovieDetails } from '../services/api';
 
 export default {
   data() {
     return {
-      movie: {} // Remplir avec les détails du film
+      movie: {}, // Remplir avec les détails du film
+      isEditing: false // État pour gérer l'édition
     };
   },
   methods: {
@@ -59,6 +107,15 @@ export default {
         }
       } catch (error) {
         console.error('Erreur lors du chargement des détails du film:', error);
+      }
+    },
+    async updateMovie() {
+      try {
+        // Ici, vous pouvez appeler votre API pour mettre à jour le film
+        await this.$api.updateMovie(this.movie.id, this.movie); // Exemple d'API
+        this.isEditing = false; // Fermer le mode édition après la sauvegarde
+      } catch (error) {
+        console.error('Erreur lors de la mise à jour du film:', error);
       }
     }
   },
@@ -107,14 +164,54 @@ h3 {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-.info-section p {
-  font-size: 1rem;
-  color: #ddd; /* Texte gris clair */
-  margin: 5px 0;
+.edit-form {
+  background-color: #222; /* Fond sombre pour le formulaire */
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-.info-section strong {
-  color: #e50914; /* Rouge Netflix pour les labels */
+.edit-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.save-button {
+  background-color: #007bff; /* Bleu */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-top: 10px; /* Espace au-dessus du bouton */
+}
+
+.save-button:hover {
+  background-color: #0056b3; /* Couleur plus foncée au survol */
+}
+
+.cancel-button {
+  background-color: #dc3545; /* Rouge */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-left: 10px; /* Espace à gauche */
+}
+
+.cancel-button:hover {
+  background-color: #c82333; /* Couleur plus foncée au survol */
 }
 
 h2 {

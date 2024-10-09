@@ -7,7 +7,20 @@
       placeholder="Rechercher un film..."
       class="search-input"
     />
+
+    <select v-model="sortCriteria" class="sort-select">
+      <option value="title">Trier par Titre</option>
+      <option value="releaseDate">Trier par Date de Sortie</option>
+      <option value="rating">Trier par Note</option>
+    </select>
+
     <button @click="showAddMovieForm" class="add-movie-button">Ajouter un Film</button>
+
+    <AddMovieForm
+      v-if="isAddMovieVisible"
+      @close="isAddMovieVisible = false"
+      @add-movie="addMovie"
+    />
 
     <div class="movies-list">
       <MovieCard
@@ -15,7 +28,7 @@
         :key="movie.id"
         :movie="movie"
         @click="handleMovieClick(movie)"
-      />
+        @delete="confirmDelete(movie.id)"/>
       <button v-if="filteredMovies.length === 0">Aucun film trouvé.</button>
     </div>
 
@@ -26,13 +39,7 @@
       @onPageChange="updatePage"
     />
 
-    <AddMovieForm
-      v-if="isAddMovieVisible"
-      @close="isAddMovieVisible = false"
-      @add-movie="addMovie"
-    />
-
-    <ConfirmationDialog
+    <PopinConfirmation
       v-if="isConfirmationVisible"
       @confirm="deleteMovie(selectedMovieId)"
       @cancel="isConfirmationVisible = false"
@@ -44,14 +51,14 @@
 import { getMovies, addMovie as addMovieService, deleteMovie } from '../services/movieService';
 import MovieCard from './MovieCard.vue';
 import AddMovieForm from './AddMovieForm.vue';
-import ConfirmationDialog from './ConfirmationDialog.vue';
+import PopinConfirmation from './PopinConfirmation.vue';
 import Pagination from './Pagination.vue';
 
 export default {
   components: {
     MovieCard,
     AddMovieForm,
-    ConfirmationDialog,
+    PopinConfirmation,
     Pagination
   },
   data() {
@@ -62,7 +69,8 @@ export default {
       isConfirmationVisible: false,
       selectedMovieId: null,
       currentPage: 1,
-      moviesPerPage: 20 // Nombre de films à afficher par page
+      moviesPerPage: 20, // Nombre de films à afficher par page
+      sortCriteria: 'title' // Critère de tri par défaut
     };
   },
   async created() {
@@ -108,10 +116,21 @@ export default {
         movie.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
+    sortedMovies() {
+      return this.filteredMovies.sort((a, b) => {
+        if (this.sortCriteria === 'title') {
+          return a.title.localeCompare(b.title);
+        } else if (this.sortCriteria === 'releaseDate') {
+          return new Date(b.releaseDate) - new Date(a.releaseDate); // Tri décroissant
+        } else if (this.sortCriteria === 'rating') {
+          return b.rating - a.rating; // Tri décroissant par note
+        }
+      });
+    },
     paginatedMovies() {
       const start = (this.currentPage - 1) * this.moviesPerPage;
       const end = start + this.moviesPerPage;
-      return this.filteredMovies.slice(start, end); // Retourne les films de la page actuelle
+      return this.sortedMovies.slice(start, end); // Retourne les films triés et paginés
     },
     totalPages() {
       return Math.ceil(this.filteredMovies.length / this.moviesPerPage); // Calcule le nombre total de pages
@@ -121,6 +140,35 @@ export default {
 </script>
 
 <style scoped>
+
+.sort-select {
+  margin-bottom: 20px; /* Marge en bas pour le sélecteur de tri */
+  padding: 10px; /* Espacement intérieur */
+  border: 1px solid #ccc; /* Bordure */
+  border-radius: 5px; /* Coins arrondis */
+  font-size: 1em; /* Taille de la police */
+}
+
+.add-movie-button {
+  background-color: #28a745; /* Couleur verte */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px; /* Espacement autour du texte */
+  cursor: pointer;
+  font-size: 1em; /* Taille de la police */
+  transition: background-color 0.3s, transform 0.3s; /* Transition pour l'effet */
+}
+
+.add-movie-button:hover {
+  background-color: #218838; /* Couleur plus foncée au survol */
+  transform: scale(1.05); /* Légère augmentation de taille au survol */
+}
+
+.add-movie-button:focus {
+  outline: none; /* Supprimer le contour par défaut */
+}
+
 .movies-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
@@ -151,7 +199,7 @@ export default {
 }
 
 .search-input {
-  width: 100%; /* Largeur 100% pour le champ de recherche */
+  width: 50%; /* Largeur 100% pour le champ de recherche */
   padding: 10px; /* Espacement intérieur */
   margin-bottom: 20px; /* Marge en bas */
   border: 1px solid #ccc; /* Bordure */
@@ -159,16 +207,13 @@ export default {
   font-size: 1em; /* Taille de la police */
 }
 
-.pagination {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0; /* Marge autour de la pagination */
-}
-
 h3 {
   margin: 10px 0 5px; /* Marges pour le titre */
   font-size: 1em; /* Taille de police du titre réduite */
   text-align: center; /* Alignement centré */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 p {
@@ -176,5 +221,10 @@ p {
   font-size: 0.8em; /* Taille de police pour la description réduite */
   color: #555; /* Couleur de texte pour la description */
   text-align: center; /* Alignement centré */
+}
+
+h1 {
+  text-align: center; /* Centrer le titre */
+  margin-bottom: 20px; /* Marge en bas */
 }
 </style>

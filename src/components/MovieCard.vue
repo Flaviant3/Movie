@@ -7,6 +7,7 @@
     <div class="rating">
       <span v-for="star in maxStars" :key="star" class="star" :class="{ filled: star <= movie.rating }">★</span>
     </div>
+    <button class="delete-button" @click.stop="deleteMovie">Supprimer</button> <!-- Bouton de suppression -->
   </div>
 </template>
 
@@ -17,7 +18,7 @@ export default {
   },
   computed: {
     formattedReleaseDate() {
-      const options = {year: 'numeric', month: 'long', day: 'numeric'};
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(this.movie.releaseDate).toLocaleDateString('fr-FR', options);
     },
     maxStars() {
@@ -26,7 +27,10 @@ export default {
   },
   methods: {
     handleClick() {
-      this.$emit('click');
+      this.$emit('click', this.movie.id); // Émettre l'ID du film
+    },
+    deleteMovie() {
+      this.$emit('delete', this.movie.id); // Émettre l'événement de suppression
     }
   }
 };
@@ -96,8 +100,19 @@ p {
   color: #ffcc00; /* Couleur survolée */
 }
 
-/* Ajout d'une animation pour les étoiles */
-.star {
-  transition: color 0.2s;
+/* Nouveau style pour le bouton de suppression */
+.delete-button {
+  background-color: #e50914; /* Rouge Netflix */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-top: 10px; /* Espace au-dessus du bouton */
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #c00712; /* Couleur plus foncée au survol */
 }
 </style>

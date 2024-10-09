@@ -101,3 +101,60 @@ export default {
   }
 };
 </script>
+
+<style>
+form {
+  background-color: #f9f9f9; /* Fond légèrement gris */
+  padding: 20px; /* Espacement intérieur */
+  border-radius: 8px; /* Coins arrondis */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  max-width: 600px; /* Largeur maximale du formulaire */
+  margin: 20px auto; /* Centrer le formulaire */
+}
+
+form div {
+  margin-bottom: 15px; /* Marge en bas pour chaque champ */
+}
+
+label {
+  display: block; /* Afficher les labels en bloc */
+  margin-bottom: 5px; /* Marge en bas pour les labels */
+  font-weight: bold; /* Mettre les labels en gras */
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea {
+  width: 100%; /* Largeur 100% pour les champs */
+  padding: 10px; /* Espacement intérieur */
+  border: 1px solid #ccc; /* Bordure */
+  border-radius: 5px; /* Coins arrondis */
+  font-size: 1em; /* Taille de la police */
+}
+
+textarea {
+  resize: vertical; /* Permettre le redimensionnement vertical */
+}
+
+button[type="submit"] {
+  background-color: #007bff; /* Couleur bleue */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px; /* Espacement autour du texte */
+  cursor: pointer;
+  font-size: 1em; /* Taille de la police */
+  transition: background-color 0.3s, transform 0.3s; /* Transition pour l'effet */
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3; /* Couleur plus foncée au survol */
+  transform: scale(1.05); /* Légère augmentation de taille au survol */
+}
+
+button[type="submit"]:focus {
+  outline: none; /* Supprimer le contour par défaut */
+}
+
+</style>
