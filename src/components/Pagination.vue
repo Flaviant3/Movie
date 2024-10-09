@@ -1,8 +1,8 @@
 <template>
   <div class="pagination">
-    <button @click="prevPage" :disabled="currentPage === 1">Précédent</button>
+    <button :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">Précédent</button>
     <span>Page {{ currentPage }} sur {{ totalPages }}</span>
-    <button @click="nextPage" :disabled="currentPage === totalPages">Suivant</button>
+    <button :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">Suivant</button>
   </div>
 </template>
 
@@ -13,15 +13,8 @@ export default {
     totalPages: Number
   },
   methods: {
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.$emit('change-page', this.currentPage - 1);
-      }
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.$emit('change-page', this.currentPage + 1);
-      }
+    goToPage(page) {
+      this.$emit('onPageChange', page);
     }
   }
 };
@@ -32,6 +25,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+}
+button {
+  margin: 0 5px;
 }
 </style>

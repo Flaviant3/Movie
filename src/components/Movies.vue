@@ -7,46 +7,114 @@
       placeholder="Rechercher un film..."
       class="search-input"
     />
+    <button @click="showAddMovieForm" class="add-movie-button">Ajouter un Film</button>
+
     <div class="movies-list">
       <MovieCard
-        v-for="movie in filteredMovies"
+        v-for="movie in paginatedMovies"
         :key="movie.id"
         :movie="movie"
         @click="handleMovieClick(movie)"
       />
+      <button v-if="filteredMovies.length === 0">Aucun film trouvé.</button>
     </div>
+
+    <Pagination
+      v-if="totalPages > 1"
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      @onPageChange="updatePage"
+    />
+
+    <AddMovieForm
+      v-if="isAddMovieVisible"
+      @close="isAddMovieVisible = false"
+      @add-movie="addMovie"
+    />
+
+    <ConfirmationDialog
+      v-if="isConfirmationVisible"
+      @confirm="deleteMovie(selectedMovieId)"
+      @cancel="isConfirmationVisible = false"
+    />
   </div>
 </template>
 
 <script>
-import {getMovies} from '../services/movieService';
-import MovieCard from './MovieCard.vue'; // Importer le composant MovieCard
+import { getMovies, addMovie as addMovieService, deleteMovie } from '../services/movieService';
+import MovieCard from './MovieCard.vue';
+import AddMovieForm from './AddMovieForm.vue';
+import ConfirmationDialog from './ConfirmationDialog.vue';
+import Pagination from './Pagination.vue';
 
 export default {
   components: {
-    MovieCard
+    MovieCard,
+    AddMovieForm,
+    ConfirmationDialog,
+    Pagination
   },
   data() {
     return {
       movies: [],
-      searchQuery: '' // Ajout d'une propriété pour la recherche
+      searchQuery: '',
+      isAddMovieVisible: false,
+      isConfirmationVisible: false,
+      selectedMovieId: null,
+      currentPage: 1,
+      moviesPerPage: 20 // Nombre de films à afficher par page
     };
   },
   async created() {
-    this.movies = await getMovies();
-  },
-  computed: {
-    filteredMovies() {
-      // Filtrer les films en fonction de la recherche
-      return this.movies.filter(movie => {
-        return movie.title.toLowerCase().includes(this.searchQuery.toLowerCase());
-      });
-    }
+    this.movies = await getMovies(); // Récupère tous les films
   },
   methods: {
     handleMovieClick(movie) {
-      // Rediriger vers les détails du film
-      this.$router.push({name: 'MovieDetails', params: {id: movie.id}});
+      this.$router.push({ name: 'MovieDetails', params: { id: movie.id } });
+    },
+    showAddMovieForm() {
+      this.isAddMovieVisible = true;
+    },
+    async addMovie(newMovie) {
+      try {
+        const addedMovie = await addMovieService(newMovie);
+        this.movies.push(addedMovie);
+        alert('Film ajouté avec succès !');
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout du film:', error.response ? error.response.data : error);
+        alert('Erreur lors de l\'ajout du film. Veuillez vérifier les données et réessayer.');
+      }
+    },
+    confirmDelete(movieId) {
+      this.selectedMovieId = movieId;
+      this.isConfirmationVisible = true;
+    },
+    async deleteMovie(movieId) {
+      try {
+        await deleteMovie(movieId);
+        this.movies = this.movies.filter(movie => movie.id !== movieId);
+        this.isConfirmationVisible = false;
+      } catch (error) {
+        alert('Erreur lors de la suppression du film. Veuillez réessayer.');
+      }
+    },
+    updatePage(newPage) {
+      this.currentPage = newPage;
+    }
+  },
+  computed: {
+    filteredMovies() {
+      return this.movies.filter(movie =>
+        movie.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+    paginatedMovies() {
+      const start = (this.currentPage - 1) * this.moviesPerPage;
+      const end = start + this.moviesPerPage;
+      return this.filteredMovies.slice(start, end); // Retourne les films de la page actuelle
+    },
+    totalPages() {
+      return Math.ceil(this.filteredMovies.length / this.moviesPerPage); // Calcule le nombre total de pages
     }
   }
 };
@@ -89,6 +157,12 @@ export default {
   border: 1px solid #ccc; /* Bordure */
   border-radius: 5px; /* Coins arrondis */
   font-size: 1em; /* Taille de la police */
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0; /* Marge autour de la pagination */
 }
 
 h3 {

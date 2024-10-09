@@ -163,33 +163,3 @@ h2 {
   text-align: center;
 }
 </style>
-
-
-.actors-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-}
-
-.actor-card {
-  flex: 1 1 calc(30% - 15px); /* 3 cards per row */
-  background-color: #e9ecef;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-}
-
-.actor-card:hover {
-  transform: scale(1.05);
-}
-
-.actor-card img {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-</style>
