@@ -82,13 +82,12 @@ export default {
     },
     async login() {
       try {
-        const response = await fetch('http://symfony.mmi-troyes.fr:8319/api/users', { // Ajustez l'URL si nécessaire
+        const response = await fetch('http://symfony.mmi-troyes.fr:8319/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            username: this.loginEmail,
             email: this.loginEmail,
             password: this.loginPassword,
           }),
@@ -97,12 +96,11 @@ export default {
         const data = await response.json();
         if (response.ok) {
           localStorage.setItem('userId', data.id);
-          localStorage.setItem('username', data.username); // Stocker le nom d'utilisateur
-          this.message = 'Login successful!'; // Notification de connexion
+          localStorage.setItem('username', data.username);
+          this.message = 'Login successful!';
           setTimeout(() => {
-            this.message = ''; // Effacer la notification après 3 secondes
+            this.message = '';
           }, 3000);
-          // Redirection ou mise à jour de l'état de l'application
         } else {
           alert(data.message || 'Error logging in');
         }

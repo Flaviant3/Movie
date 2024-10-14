@@ -16,7 +16,7 @@
         </label>
         <label>
           Durée :
-          <input type="number" v-model="movie.duration" required />
+          <input type="number" v-model.number="movie.duration" required />
         </label>
         <label>
           Studio :
@@ -36,7 +36,7 @@
         </label>
         <label>
           Note :
-          <input type="number" v-model="movie.rating" min="0" max="5" step="0.1" required />
+          <input type="number" v-model.number="movie.rating" min="0" max="5" step="0.1" required />
         </label>
         <label>
           Réalisateur :
@@ -68,7 +68,7 @@
           :key="actor.id"
           class="actor-card"
           @click="goToActorDetails(actor.id)">
-          <img :src="actor.media" alt="Photo de l'acteur" class="actor-image" />
+          <img v-if="actor.media" :src="actor.media" alt="Photo de l'acteur" class="actor-image" />
           <p><strong>Nom :</strong> {{ actor.lastname }}</p>
           <p><strong>Date de naissance :</strong> {{ actor.dob }}</p>
           <p><strong>Nationalité :</strong> {{ actor.nationality }}</p>
@@ -82,6 +82,7 @@
 
 <script>
 import { fetchActorDetails, fetchMovieDetails } from '../services/api';
+import { updateMovie as movieServiceUpdate } from "../services/movieService";
 
 export default {
   data() {
@@ -111,11 +112,18 @@ export default {
     },
     async updateMovie() {
       try {
-        // Ici, vous pouvez appeler votre API pour mettre à jour le film
-        await this.$api.updateMovie(this.movie.id, this.movie); // Exemple d'API
+        this.movie.rating = parseFloat(this.movie.rating);
+        console.log(this.movie); // Vérifiez les données ici
+        await movieServiceUpdate(this.movie.id, this.movie);
         this.isEditing = false; // Fermer le mode édition après la sauvegarde
       } catch (error) {
-        console.error('Erreur lors de la mise à jour du film:', error);
+        if (error.response) {
+          console.error('Erreur lors de la mise à jour du film:', error.response.data);
+          alert(`Erreur: ${error.response.data.message || 'Erreur inconnue.'}`);
+        } else {
+          console.error('Erreur réseau ou autre:', error);
+          alert('Erreur lors de la mise à jour du film.');
+        }
       }
     }
   },

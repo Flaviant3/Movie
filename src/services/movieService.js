@@ -40,6 +40,21 @@ export const addMovie = async (newMovie) => {
   }
 };
 
+export const updateMovie = async (movieId, updatedMovie) => {
+  try {
+    const response = await axios.patch(`${API_URL}/${movieId}`, updatedMovie, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/merge-patch+json'
+      },
+    });
+    return response.data; // Assurez-vous de retourner les données de la réponse
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du film:', error); // Affichez l'erreur
+    throw error; // Relancez l'erreur pour la gérer dans le composant
+  }
+}
+
 export async function deleteMovie(movieId) {
   try {
     await axios.delete(`${API_URL}/${movieId}`);

@@ -44,46 +44,79 @@
       <label for="saga">Saga :</label>
       <input type="text" v-model="saga" />
     </div>
+    <div>
+      <label for="actors">Acteurs :</label>
+      <select v-model="selectedActors" multiple>
+        <option v-for="actor in actors" :key="actor.id" :value="actor['@id']">
+          {{ actor.lastname }} <!-- Affiche le nom de famille -->
+        </option>
+      </select>
+    </div>
     <button type="submit">Ajouter le film</button>
   </form>
 </template>
 
 <script>
+import axios from 'axios';
+import { addMovie } from "../services/movieService";
+
 export default {
   data() {
     return {
       title: '',
       description: '',
       releaseDate: '',
-      duration: null, // Assurez-vous que c'est un entier
-      entries: null, // Assurez-vous que c'est un entier
+      duration: null,
+      entries: null,
       director: '',
-      rating: null, // Assurez-vous que c'est un nombre
+      rating: null,
       media: '',
       studio: '',
       genre: '',
-      saga: ''
+      saga: '',
+      selectedActors: [],
+      actors: [] // Liste des acteurs
     };
   },
+  created() {
+    this.fetchActors(); // Récupérer les acteurs lors de la création du composant
+  },
   methods: {
-    submitForm() {
+    async fetchActors() {
+      try {
+        const response = await axios.get('http://symfony.mmi-troyes.fr:8319/api/actors');
+        this.actors = response.data['hydra:member']; // Accédez aux acteurs ici
+      } catch (error) {
+        console.error('Erreur lors de la récupération des acteurs:', error);
+      }
+    },
+    async submitForm() {
       const newMovie = {
         title: this.title,
         description: this.description,
         release_date: this.releaseDate,
-        duration: parseInt(this.duration, 10), // Convertir en entier
-        entries: parseInt(this.entries, 10), // Convertir en entier
+        duration: parseInt(this.duration, 10),
+        entries: parseInt(this.entries, 10),
         director: this.director,
-        rating: parseFloat(this.rating), // Convertir en nombre
+        rating: parseFloat(this.rating),
         media: this.media,
         studio: this.studio,
         genre: this.genre,
         saga: this.saga,
-        created_at: new Date().toISOString() // Ajouter la date actuelle
+        created_at: new Date().toISOString(),
+        movie_actor: this.selectedActors // Utilisez les IRIs ici
       };
-      this.$emit('add-movie', newMovie);
-      this.resetForm();
-      this.$emit('close');
+
+      console.log(newMovie); // Vérifiez la structure ici
+
+      try {
+        await addMovie(newMovie);
+        this.resetForm();
+        this.$emit('close');
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout du film:', error.response.data); // Affichez l'erreur
+        alert('Une erreur est survenue lors de l\'ajout du film.'); // Alerte utilisateur
+      }
     },
     resetForm() {
       this.title = '';
@@ -97,6 +130,7 @@ export default {
       this.studio = '';
       this.genre = '';
       this.saga = '';
+      this.selectedActors = []; // Réinitialiser les acteurs sélectionnés
     }
   }
 };

@@ -69,7 +69,7 @@ export default {
       isConfirmationVisible: false,
       selectedMovieId: null,
       currentPage: 1,
-      moviesPerPage: 20, // Nombre de films à afficher par page
+      moviesPerPage: 30, // Nombre de films à afficher par page
       sortCriteria: 'title' // Critère de tri par défaut
     };
   },
