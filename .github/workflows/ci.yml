@@ -3,11 +3,13 @@ name: CI
 on:
   push:
     branches:
-      - main  # ou la branche que vous souhaitez surveiller
-  pull_request:
-    branches:
-      - main  # ou la branche que vous souhaitez surveiller
-
+      - develop
+      - main
+      - feature/*
+    pull_request:
+        branches:
+          - develop
+          - main
 jobs:
   build:
     runs-on: ubuntu-latest
