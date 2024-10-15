@@ -28,7 +28,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm run test || echo "No tests found"
+        run: npm test || echo "No tests found"
 
       - name: Build
         run: npm run build
