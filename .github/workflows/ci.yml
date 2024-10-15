@@ -19,17 +19,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set Node.js version
-        run: |
-          echo "NODE_VERSION=16" >> $GITHUB_ENV  # Utilisation de Node.js 16
-
-      - name: Force Node.js 16
-        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=false" >> $GITHUB_ENV  # Pas besoin de forcer à Node 20
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: '20'  # Utilisation de Node.js 20
 
       - name: Install dependencies
         run: npm install
