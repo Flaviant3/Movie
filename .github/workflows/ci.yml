@@ -21,10 +21,10 @@ jobs:
 
       - name: Set Node.js version
         run: |
-          echo "NODE_VERSION=20" >> $GITHUB_ENV
+          echo "NODE_VERSION=16" >> $GITHUB_ENV  # Utilisation de Node.js 16
 
-      - name: Force Node.js 20
-        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=true" >> $GITHUB_ENV
+      - name: Force Node.js 16
+        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=false" >> $GITHUB_ENV  # Pas besoin de forcer à Node 20
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
