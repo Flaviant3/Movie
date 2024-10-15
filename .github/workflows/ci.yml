@@ -3,13 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - develop
-      - main
-      - feature/*
+      - main  # ou la branche que vous souhaitez surveiller
   pull_request:
     branches:
-      - develop
-      - main
+      - main  # ou la branche que vous souhaitez surveiller
 
 jobs:
   build:
@@ -17,24 +14,23 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Utilisation de la version 3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3  # Utilisation de la version 3
         with:
-          node-version: '20'  # Utilisation de Node.js 20
+          node-version: '20'  # Spécifiez la version de Node.js (20 ou plus)
 
       - name: Install dependencies
         run: npm install
 
-      - name: Print environment
-        run: |
-          node -v
-          npm -v
-          npm list
+      - name: Build the project
+        run: npm run build  # Remplacez par votre commande de build
 
       - name: Run tests
-        run: npm test || echo "No tests found"
+        run: npm test  # Remplacez par votre commande de test
 
-      - name: Build
-        run: npm run build
+      - name: Deploy
+        run: |
+          echo "Déployer votre application ici"
+          # Ajoutez les commandes pour déployer votre application
