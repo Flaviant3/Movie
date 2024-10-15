@@ -19,19 +19,19 @@ jobs:
       - name: Force Node.js 20
         run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=true" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        run: npm install --force
-
       - name: Checkout code
-        uses: actions/checkout@v3  # Utilisation de la version 3
+        uses: actions/checkout@v3
+
+      - name: List files
+        run: ls -la  # Vérifiez la présence de package.json
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3  # Utilisation de la version 3
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Spécifiez la version de Node.js (20 ou plus)
+          node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps  # Ou --force si nécessaire
 
       - name: Build the project
         run: npm run build  # Remplacez par votre commande de build
@@ -42,4 +42,3 @@ jobs:
       - name: Deploy
         run: |
           echo "Déployer votre application ici"
-          # Ajoutez les commandes pour déployer votre application
