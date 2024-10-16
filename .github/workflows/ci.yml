@@ -39,6 +39,21 @@ jobs:
       - name: Run tests
         run: npm test  # Remplacez par votre commande de test
 
+      - name: Send email notification
+        if: success() || failure()  # Envoie l'email même en cas d'échec
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.flaviant3@gmail.com }}  # Ajoutez votre adresse e-mail dans les secrets
+          password: ${{ secrets.test123 }}  # Ajoutez votre mot de passe dans les secrets
+          subject: 'Notification de CI pour le projet'
+          body: |
+            Le workflow CI a été exécuté avec succès sur la branche ${{ github.ref }}.
+            Vérifiez les résultats en accédant aux logs de GitHub Actions.
+          to: flaviant3@gmail.com
+          from: ${{ secrets.flaviant3@gmail.com }}
+
       - name: Deploy
         run: |
           echo "Déployer votre application ici"
