@@ -45,14 +45,14 @@ jobs:
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          username: ${{ secrets.flaviant3@gmail.com }}  # Ajoutez votre adresse e-mail dans les secrets
+          username: ${{ secrets.flaviant3}}  # Ajoutez votre adresse e-mail dans les secrets
           password: ${{ secrets.test123 }}  # Ajoutez votre mot de passe dans les secrets
           subject: 'Notification de CI pour le projet'
           body: |
             Le workflow CI a été exécuté avec succès sur la branche ${{ github.ref }}.
             Vérifiez les résultats en accédant aux logs de GitHub Actions.
           to: flaviant3@gmail.com
-          from: ${{ secrets.flaviant3@gmail.com }}
+          from: ${{ secrets.flaviant3 }}
 
       - name: Deploy
         run: |
