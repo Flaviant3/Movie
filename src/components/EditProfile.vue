@@ -82,7 +82,7 @@ export default {
     },
     async login() {
       try {
-        const response = await fetch('http://symfony.mmi-troyes.fr:8319/api/login', {
+        const response = await fetch('http://symfony.mmi-troyes.fr:8319/auth', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -95,11 +95,13 @@ export default {
 
         const data = await response.json();
         if (response.ok) {
+          localStorage.setItem('jwtToken', data.token); // Stocker le token JWT
           localStorage.setItem('userId', data.id);
           localStorage.setItem('username', data.username);
           this.message = 'Login successful!';
           setTimeout(() => {
             this.message = '';
+            window.location.href = '/homepage'; // Redirection après 3 secondes
           }, 3000);
         } else {
           alert(data.message || 'Error logging in');
@@ -111,11 +113,12 @@ export default {
     async updateProfile() {
       try {
         const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('jwtToken');
         const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users/${userId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${this.token}`,
+            'Authorization': `Bearer ${token}`, // Utilisation du token JWT
           },
           body: JSON.stringify({
             email: this.profile.email,
