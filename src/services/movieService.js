@@ -1,42 +1,59 @@
-// services/movieService.js
-import axios from 'axios';
+import axios from 'axios'; // Assurez-vous d'importer axios
 
-const API_URL = 'http://symfony.mmi-troyes.fr:8319/api/movies';
+const API_URL = 'http://symfony.mmi-troyes.fr:8319/api/movies'; // Remplacez par votre URL API
+
+const getAuthToken = () => {
+  return localStorage.getItem('jwtToken'); // Récupérer le token
+};
 
 export const getMovies = async () => {
   const allMovies = [];
   let currentPage = 1;
   let totalPages;
 
+  const token = getAuthToken();
+  console.log(token, 'mon token'); // moshi verif token
+
+  if (!token) {
+    console.error('Aucun token d\'authentification trouvé.');
+    return [];
+  }
+
   try {
     do {
-      const response = await axios.get(`${API_URL}?page=${currentPage}`);
-      console.log('Réponse de l\'API:', response.data); // Vérifiez la réponse
-
-      // Ajoutez les films de la page actuelle
+      const response = await axios.get(`${API_URL}?page=${currentPage}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       allMovies.push(...response.data['hydra:member']);
-
-      // Récupérez le nombre total de pages
       const lastPageLink = response.data['hydra:view']['hydra:last'];
       totalPages = lastPageLink ? parseInt(lastPageLink.split('page=')[1]) : currentPage;
-
       currentPage++;
     } while (currentPage <= totalPages);
 
-    return allMovies; // Retournez tous les films
+    return allMovies;
   } catch (error) {
     console.error('Erreur lors de la récupération des films:', error);
     return [];
   }
 };
 
-export const addMovie = async (newMovie) => {
+
+export const addMovie = async (movieData) => {
+  const token = localStorage.getItem('jwtToken'); // Récupérer le jeton du localStorage
+
   try {
-    const response = await axios.post(API_URL, newMovie);
-    return response.data; // Assurez-vous de retourner les données de la réponse
+    const response = await axios.post('http://symfony.mmi-troyes.fr:8319/api/movies', movieData, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Ajouter le jeton dans l'en-tête
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
   } catch (error) {
-    console.error('Erreur lors de l\'ajout du film:', error); // Affichez l'erreur
-    throw error; // Relancez l'erreur pour la gérer dans le composant
+    console.error('Erreur lors de l\'ajout du film:', error);
+    throw error; // Propager l'erreur pour la gestion ultérieure
   }
 };
 

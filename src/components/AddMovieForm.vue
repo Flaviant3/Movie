@@ -58,7 +58,7 @@
 
 <script>
 import axios from 'axios';
-import { addMovie } from "../services/movieService";
+import { addMovie } from "@/services/movieService";
 
 export default {
   data() {
@@ -190,5 +190,4 @@ button[type="submit"]:hover {
 button[type="submit"]:focus {
   outline: none; /* Supprimer le contour par défaut */
 }
-
 </style>

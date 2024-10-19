@@ -97,7 +97,7 @@ export default {
         if (response.ok) {
           localStorage.setItem('jwtToken', data.token); // Stocker le token JWT
           localStorage.setItem('userId', data.id);
-          localStorage.setItem('username', data.username);
+          localStorage.setItem('username', data.email); // Stocker l'email ici
           this.message = 'Login successful!';
           setTimeout(() => {
             this.message = '';
@@ -227,26 +227,8 @@ button:hover {
   background-color: #ff4b2b; /* Couleur au survol */
 }
 
-button:active {
-  transform: scale(0.95); /* Effet de clic */
-}
-
-@media (max-width: 500px) {
-  #container {
-    width: 90%; /* Largeur responsive */
-  }
-
-  h1 {
-    font-size: 20px; /* Ajustement de la taille de police */
-  }
-}
-
 .notification {
-  background-color: #4caf50; /* Vert */
-  color: white;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 5px;
-  text-align: center;
+  color: #e50914; /* Couleur rouge pour les notifications */
+  margin-bottom: 20px; /* Espace sous la notification */
 }
 </style>

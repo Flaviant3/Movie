@@ -7,6 +7,14 @@
       placeholder="Rechercher un acteur..."
       class="search-input"
     />
+    <button @click="showAddActorForm" class="add-actor-button">Ajouter un Acteur</button>
+
+    <AddActorForm
+      v-if="isAddActorVisible"
+      @close="isAddActorVisible = false"
+      @add-actor="addActor"
+    />
+
     <div class="actors-list">
       <ActorCard
         v-for="actor in filteredActors"
@@ -19,17 +27,20 @@
 </template>
 
 <script>
-import { getActors } from '../services/actorService'; // Service pour récupérer les acteurs
-import ActorCard from './ActorCard.vue'; // Importer le composant ActorCard
+import { getActors, addActor } from '../services/actorService'; // Importer le service
+import ActorCard from './ActorCard.vue';
+import AddActorForm from './AddActorForm.vue';
 
 export default {
   components: {
-    ActorCard
+    ActorCard,
+    AddActorForm
   },
   data() {
     return {
       actors: [],
-      searchQuery: '' // Ajout d'une propriété pour la recherche
+      searchQuery: '',
+      isAddActorVisible: false // État pour afficher le formulaire d'ajout
     };
   },
   async created() {
@@ -37,7 +48,6 @@ export default {
   },
   computed: {
     filteredActors() {
-      // Filtrer les acteurs en fonction de la recherche
       return this.actors.filter(actor => {
         return actor.lastname.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
@@ -45,8 +55,20 @@ export default {
   },
   methods: {
     handleActorClick(actor) {
-      // Rediriger vers les détails de l'acteur
       this.$router.push({ name: 'ActorDetails', params: { id: actor.id } });
+    },
+    showAddActorForm() {
+      this.isAddActorVisible = true; // Afficher le formulaire d'ajout
+    },
+    async addActor(newActor) {
+      try {
+        const addedActor = await addActor(newActor);
+        this.actors.push(addedActor); // Ajouter l'acteur à la liste
+        alert('Acteur ajouté avec succès !');
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout de l\'acteur:', error.response ? error.response.data : error);
+        alert('Erreur lors de l\'ajout de l\'acteur. Veuillez vérifier les données et réessayer.');
+      }
     }
   }
 };

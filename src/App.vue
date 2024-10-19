@@ -9,9 +9,9 @@
         <router-link to="/categories" class="nav-link">Categories</router-link>
       </div>
       <div class="profile-actions">
-        <span class="username" v-if="username">{{ username }}</span> <!-- Afficher le nom d'utilisateur uniquement s'il est présent -->
+        <span class="email" v-if="email">{{ email }}</span> <!-- Afficher l'email uniquement s'il est présent -->
         <router-link to="/edit-profile" class="edit-profile">Modifier Profil</router-link>
-        <button v-if="username" class="logout" @click="logout">Logout</button>
+        <button v-if="email" class="logout" @click="logout">Logout</button>
       </div>
     </nav>
     <router-view></router-view>
@@ -23,18 +23,18 @@ export default {
   name: 'App',
   data() {
     return {
-      username: '', // Initialiser le nom d'utilisateur
+      email: '', // Initialiser l'email
     };
   },
   created() {
-    // Récupérer le nom d'utilisateur lors de la création du composant
-    this.username = localStorage.getItem('username') || '';
+    // Récupérer l'email lors de la création du composant
+    this.email = localStorage.getItem('username') || ''; // Remplacez 'username' par le nom de la clé contenant l'email
   },
   methods: {
     logout() {
       localStorage.removeItem('userId'); // Suppression de l'ID utilisateur
-      localStorage.removeItem('username'); // Suppression du nom d'utilisateur
-      this.username = ''; // Réinitialiser le nom d'utilisateur dans le composant
+      localStorage.removeItem('username'); // Suppression de l'email
+      this.email = ''; // Réinitialiser l'email dans le composant
       this.$router.push('/'); // Redirection vers la page d'accueil
       alert('Vous êtes déconnecté.'); // Message de confirmation
     }
@@ -114,8 +114,8 @@ nav {
   background-color: #f40612; /* Couleur plus foncée au survol */
 }
 
-.username {
-  color: #ffffff; /* Couleur du texte du nom d'utilisateur */
-  margin-right: 15px; /* Espacement entre le nom et les actions */
+.email {
+  color: #ffffff; /* Couleur du texte de l'email */
+  margin-right: 15px; /* Espacement entre l'email et les actions */
 }
 </style>

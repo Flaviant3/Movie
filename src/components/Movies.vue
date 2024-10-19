@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getMovies, addMovie as addMovieService, deleteMovie } from '../services/movieService';
+import { getMovies } from '@/services/movieService.js';
 import MovieCard from './MovieCard.vue';
 import AddMovieForm from './AddMovieForm.vue';
 import PopinConfirmation from './PopinConfirmation.vue';
