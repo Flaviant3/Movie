@@ -37,7 +37,7 @@ jobs:
         run: npm run build  # Remplacez par votre commande de build
 
       - name: Run tests
-        run: npm test  # Remplacez par votre commande de test
+        run: npm test  # Remplacez par votre commande de tes
 
       - name: Deploy
         run: |
