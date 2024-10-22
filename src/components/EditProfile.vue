@@ -2,6 +2,7 @@
   <div>
     <div id="container">
       <div v-if="message" class="notification">{{ message }}</div>
+
       <div class="form-container sign-up-container">
         <form @submit.prevent="signUp">
           <h1>Create Account</h1>
@@ -12,7 +13,9 @@
           <button type="submit">Sign Up</button>
         </form>
       </div>
+
       <div class="separator"></div>
+
       <div class="form-container login-container">
         <form @submit.prevent="login">
           <h1>Login</h1>
@@ -20,18 +23,21 @@
           <input type="email" v-model="loginEmail" placeholder="Email" required />
           <input type="password" v-model="loginPassword" placeholder="Password" required />
           <button type="submit">Login</button>
+          <a href="#" @click.prevent="showPasswordModal">Forgot Password?</a>
         </form>
       </div>
-      <div class="separator"></div>
-      <div class="form-container profile-update-container">
-        <form @submit.prevent="updateProfile">
-          <h1>Update Profile</h1>
-          <span>Update your information</span>
-          <input type="email" v-model="profile.email" placeholder="Email" required />
-          <input type="text" v-model="profile.name" placeholder="New Name" required />
-          <input type="password" v-model="profile.password" placeholder="New Password" required />
-          <button type="submit">Update</button>
-        </form>
+    </div>
+
+    <div v-if="showModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closePasswordModal">&times;</span>
+        <h2>Change Password</h2>
+        <input type="email" v-model="emailForPasswordChange" placeholder="Email" required />
+        <button @click="verifyEmail">Next</button>
+        <div v-if="userId">
+          <input type="password" v-model="newPassword" placeholder="New Password" required />
+          <button @click="changePassword">Change Password</button>
+        </div>
       </div>
     </div>
   </div>
@@ -46,14 +52,13 @@ export default {
         email: '',
         password: '',
       },
-      profile: {
-        email: '',
-        name: '',
-        password: '',
-      },
       message: '',
       loginEmail: '',
       loginPassword: '',
+      showModal: false,
+      newPassword: '',
+      emailForPasswordChange: '',
+      userId: null, // Pour stocker l'ID utilisateur
     };
   },
   methods: {
@@ -68,11 +73,11 @@ export default {
         });
 
         const data = await response.json();
-        console.log('Réponse d\'inscription:', data); // Log pour débogage
+        console.log('Réponse d\'inscription:', data);
 
         if (response.ok) {
           this.message = 'Compte créé avec succès!';
-          localStorage.setItem('userId', data.id); // Assurez-vous que data.id existe
+          localStorage.setItem('userId', data.id);
           setTimeout(() => {
             this.message = '';
           }, 3000);
@@ -97,12 +102,12 @@ export default {
         });
 
         const data = await response.json();
-        console.log('Login Response:', data); // Log the response
+        console.log('Login Response:', data);
 
         if (response.ok) {
           localStorage.setItem('jwtToken', data.token);
-          localStorage.setItem('userId', data.id); // Assurez-vous que data.id existe
-          localStorage.setItem('name', data.username); // Utilisez username
+          localStorage.setItem('userId', data.id);
+          localStorage.setItem('name', data.username);
           this.message = 'Connexion réussie!';
           setTimeout(() => {
             this.message = '';
@@ -115,41 +120,81 @@ export default {
         alert('Erreur lors de la connexion');
       }
     },
-    async updateProfile() {
+    showPasswordModal() {
+      this.showModal = true;
+      this.emailForPasswordChange = '';
+      this.newPassword = '';
+      this.userId = null; // Réinitialiser l'ID utilisateur
+    },
+    closePasswordModal() {
+      this.showModal = false;
+      this.newPassword = '';
+      this.emailForPasswordChange = '';
+      this.userId = null; // Réinitialiser l'ID utilisateur
+    },
+    async verifyEmail() {
       try {
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('jwtToken');
-
-        if (!userId || !token) {
-          alert('Utilisateur non connecté ou ID utilisateur manquant.');
+        // Vérifie d'abord que l'email est bien renseigné
+        if (!this.emailForPasswordChange) {
+          alert('Veuillez entrer un email.');
           return;
         }
 
-        const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users/${userId}`, {
+        // Envoie la requête à l'API pour vérifier l'email
+        const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.length > 0) {
+          this.userId = data[0].id; // Récupère l'ID utilisateur
+          alert('Email vérifié. Vous pouvez maintenant changer votre mot de passe.');
+        } else if (data.length === 0) {
+          alert('Email non trouvé. Veuillez vérifier l\'adresse entrée.');
+          this.userId = null; // Réinitialiser si l'email n'est pas trouvé
+        } else {
+          alert(data.message || 'Erreur lors de la vérification de l\'email');
+        }
+      } catch (error) {
+        console.error('Erreur lors de la requête:', error);
+        alert('Erreur lors de la vérification de l\'email');
+      }
+    },
+    async changePassword() {
+      try {
+        const token = localStorage.getItem('jwtToken');
+
+        if (!this.userId) {
+          alert('ID utilisateur manquant.');
+          return;
+        }
+
+        const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users/${this.userId}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/merge-patch+json',
             'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            email: this.profile.email,
-            name: this.profile.name,
-            password: this.profile.password,
-          }),
+          body: JSON.stringify({ password: this.newPassword }),
         });
 
         const data = await response.json();
         if (response.ok) {
-          alert('Profil mis à jour avec succès!');
+          alert('Mot de passe changé avec succès!');
+          this.closePasswordModal();
         } else {
-          alert(data.message || 'Erreur lors de la mise à jour du profil');
+          alert(data.message || 'Erreur lors du changement de mot de passe');
         }
       } catch (error) {
-        alert('Erreur lors de la mise à jour du profil');
+        alert('Erreur lors du changement de mot de passe');
       }
     }
   }
-};
+  };
 </script>
 
 <style scoped>
@@ -179,23 +224,16 @@ h2 {
   text-align: center;
 }
 
-p {
-  font-size: 14px;
-  font-weight: 100;
-  line-height: 20px;
-  letter-spacing: 0.5px;
-  margin: 20px 0 30px;
-}
-
 span {
   font-size: 12px;
 }
 
 a {
-  color: #333;
+  color: #FF4B2B;
   font-size: 14px;
   text-decoration: none;
   margin: 15px 0;
+  cursor: pointer;
 }
 
 button {
@@ -219,11 +257,6 @@ button:focus {
   outline: none;
 }
 
-button.ghost {
-  background-color: transparent;
-  border-color: #FFFFFF;
-}
-
 form {
   background-color: #FFFFFF;
   display: flex;
@@ -243,28 +276,6 @@ input {
   width: 100%;
 }
 
-.container {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-  0 10px 10px rgba(0,0,0,0.22);
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: 1200px;
-  min-height: 480px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.form-container {
-  width: 100%;
-  max-width: 400px;
-  margin: 20px 0;
-}
-
 .separator {
   width: 100%;
   height: 1px;
@@ -272,7 +283,35 @@ input {
   margin: 20px 0;
 }
 
-.social-container {
-  margin: 20px 0;
+/* Styles pour la modale */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>
