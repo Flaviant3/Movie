@@ -1,9 +1,9 @@
-import axios from 'axios'; // Assurez-vous d'importer axios
+import axios from 'axios';
 
-const API_URL = 'http://symfony.mmi-troyes.fr:8319/api/movies'; // Remplacez par votre URL API
+const API_URL = 'http://symfony.mmi-troyes.fr:8319/api/movies';
 
 const getAuthToken = () => {
-  return localStorage.getItem('jwtToken'); // Récupérer le token
+  return localStorage.getItem('jwtToken');
 };
 
 export const getMovies = async () => {
@@ -12,8 +12,6 @@ export const getMovies = async () => {
   let totalPages;
 
   const token = getAuthToken();
-  console.log(token, 'mon token'); // moshi verif token
-
   if (!token) {
     console.error('Aucun token d\'authentification trouvé.');
     return [];
@@ -34,49 +32,73 @@ export const getMovies = async () => {
 
     return allMovies;
   } catch (error) {
-    console.error('Erreur lors de la récupération des films:', error);
+    console.error('Erreur lors de la récupération des films:', error.response ? error.response.data : error);
     return [];
   }
 };
 
 
 export const addMovie = async (movieData) => {
-  const token = localStorage.getItem('jwtToken'); // Récupérer le jeton du localStorage
+  const token = getAuthToken();
+
+  if (!token) {
+    console.error('Aucun token d\'authentification trouvé pour l\'ajout du film.');
+    throw new Error('Token manquant');
+  }
 
   try {
-    const response = await axios.post('http://symfony.mmi-troyes.fr:8319/api/movies', movieData, {
+    const response = await axios.post(API_URL, movieData, {
       headers: {
-        Authorization: `Bearer ${token}`, // Ajouter le jeton dans l'en-tête
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
     return response.data;
   } catch (error) {
     console.error('Erreur lors de l\'ajout du film:', error);
-    throw error; // Propager l'erreur pour la gestion ultérieure
+    throw error;
   }
 };
 
 export const updateMovie = async (movieId, updatedMovie) => {
+  const token = getAuthToken();
+
+  if (!token) {
+    console.error('Aucun token d\'authentification trouvé pour la mise à jour du film.');
+    throw new Error('Token manquant');
+  }
+
   try {
     const response = await axios.patch(`${API_URL}/${movieId}`, updatedMovie, {
       headers: {
+        'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
         'Content-Type': 'application/merge-patch+json'
       },
     });
-    return response.data; // Assurez-vous de retourner les données de la réponse
+    return response.data;
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du film:', error); // Affichez l'erreur
-    throw error; // Relancez l'erreur pour la gérer dans le composant
+    console.error('Erreur lors de la mise à jour du film:', error);
+    throw error;
   }
-}
+};
 
-export async function deleteMovie(movieId) {
+export const deleteMovie = async (movieId) => {
+  const token = getAuthToken();
+
+  if (!token) {
+    console.error('Aucun token d\'authentification trouvé pour la suppression du film.');
+    throw new Error('Token manquant');
+  }
+
   try {
-    await axios.delete(`${API_URL}/${movieId}`);
+    await axios.delete(`${API_URL}/${movieId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
   } catch (error) {
     console.error('Erreur lors de la suppression du film:', error);
-    throw error; // Relancer l'erreur pour la gérer dans le composant
+    throw error;
   }
-}
+};

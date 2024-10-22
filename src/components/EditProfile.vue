@@ -6,7 +6,7 @@
         <form @submit.prevent="signUp">
           <h1>Create Account</h1>
           <span>or use your email for registration</span>
-          <input type="text" v-model="user.username" placeholder="Name" required />
+          <input type="text" v-model="user.name" placeholder="Name" required />
           <input type="email" v-model="user.email" placeholder="Email" required />
           <input type="password" v-model="user.password" placeholder="Password" required />
           <button type="submit">Sign Up</button>
@@ -26,7 +26,7 @@
           <h1>Update Profile</h1>
           <span>Update your information</span>
           <input type="email" v-model="profile.email" placeholder="Email" required />
-          <input type="text" v-model="profile.username" placeholder="New Name" required />
+          <input type="text" v-model="profile.name" placeholder="New Name" required />
           <input type="password" v-model="profile.password" placeholder="New Password" required />
           <button type="submit">Update</button>
         </form>
@@ -40,13 +40,13 @@ export default {
   data() {
     return {
       user: {
-        username: '',
+        name: '', // Remplacez username par name
         email: '',
         password: '',
       },
       profile: {
         email: '',
-        username: '',
+        name: '', // Remplacez username par name
         password: '',
       },
       message: '', // Pour gérer la notification
@@ -57,7 +57,7 @@ export default {
   methods: {
     async signUp() {
       try {
-        const response = await fetch('http://symfony.mmi-troyes.fr:8319/api/users', {
+        const response = await fetch('http://symfony.mmi-troyes.fr:8319/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export default {
         if (response.ok) {
           this.message = 'Account created successfully!'; // Notification
           localStorage.setItem('userId', data.id);
-          localStorage.setItem('username', this.user.username); // Stocker le nom d'utilisateur
+          localStorage.setItem('name', this.user.name); // Stocker le nom ici
           setTimeout(() => {
             this.message = ''; // Effacer la notification après 3 secondes
           }, 3000);
@@ -97,7 +97,7 @@ export default {
         if (response.ok) {
           localStorage.setItem('jwtToken', data.token); // Stocker le token JWT
           localStorage.setItem('userId', data.id);
-          localStorage.setItem('username', data.email); // Stocker l'email ici
+          localStorage.setItem('name', data.email); // Stocker l'email ici
           this.message = 'Login successful!';
           setTimeout(() => {
             this.message = '';
@@ -122,7 +122,7 @@ export default {
           },
           body: JSON.stringify({
             email: this.profile.email,
-            username: this.profile.username,
+            name: this.profile.name, // Remplacez username par name
             password: this.profile.password,
           }),
         });
@@ -219,16 +219,6 @@ button {
   text-transform: uppercase;
   cursor: pointer; /* Curseur pointer */
   transition: background-color 0.3s, transform 80ms ease-in; /* Ajout de transitions */
-  width: 100%; /* Prendre toute la largeur */
-  margin-top: 10px; /* Espace au-dessus du bouton */
-}
-
-button:hover {
-  background-color: #ff4b2b; /* Couleur au survol */
-}
-
-.notification {
-  color: #e50914; /* Couleur rouge pour les notifications */
-  margin-bottom: 20px; /* Espace sous la notification */
+  width: 100%;
 }
 </style>
