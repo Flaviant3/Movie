@@ -68,18 +68,19 @@ export default {
         });
 
         const data = await response.json();
+        console.log('Réponse d\'inscription:', data); // Log pour débogage
+
         if (response.ok) {
-          this.message = 'Account created successfully!';
-          localStorage.setItem('userId', data.id);
-          localStorage.setItem('name', this.user.name);
+          this.message = 'Compte créé avec succès!';
+          localStorage.setItem('userId', data.id); // Assurez-vous que data.id existe
           setTimeout(() => {
             this.message = '';
           }, 3000);
         } else {
-          alert(data.message || 'Error creating account');
+          alert(data.message || 'Erreur lors de la création du compte');
         }
       } catch (error) {
-        alert('Error creating account');
+        alert('Erreur lors de la création du compte');
       }
     },
     async login() {
@@ -96,26 +97,34 @@ export default {
         });
 
         const data = await response.json();
+        console.log('Login Response:', data); // Log the response
+
         if (response.ok) {
           localStorage.setItem('jwtToken', data.token);
-          localStorage.setItem('userId', data.id);
-          localStorage.setItem('name', data.email);
-          this.message = 'Login successful!';
+          localStorage.setItem('userId', data.id); // Assurez-vous que data.id existe
+          localStorage.setItem('name', data.username); // Utilisez username
+          this.message = 'Connexion réussie!';
           setTimeout(() => {
             this.message = '';
             window.location.href = '/homepage';
           }, 3000);
         } else {
-          alert(data.message || 'Error logging in');
+          alert(data.message || 'Erreur lors de la connexion');
         }
       } catch (error) {
-        alert('Error logging in');
+        alert('Erreur lors de la connexion');
       }
     },
     async updateProfile() {
       try {
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('jwtToken');
+
+        if (!userId || !token) {
+          alert('Utilisateur non connecté ou ID utilisateur manquant.');
+          return;
+        }
+
         const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users/${userId}`, {
           method: 'PATCH',
           headers: {
@@ -131,15 +140,15 @@ export default {
 
         const data = await response.json();
         if (response.ok) {
-          alert('Profile updated successfully!');
+          alert('Profil mis à jour avec succès!');
         } else {
-          alert(data.message || 'Error updating profile');
+          alert(data.message || 'Erreur lors de la mise à jour du profil');
         }
       } catch (error) {
-        alert('Error updating profile');
+        alert('Erreur lors de la mise à jour du profil');
       }
     }
-  },
+  }
 };
 </script>
 
@@ -238,7 +247,7 @@ input {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-              0 10px 10px rgba(0,0,0,0.22);
+  0 10px 10px rgba(0,0,0,0.22);
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -265,41 +274,5 @@ input {
 
 .social-container {
   margin: 20px 0;
-}
-
-.social-container a {
-  border: 1px solid #DDDDDD;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 5px;
-  height: 40px;
-  width: 40px;
-}
-
-footer {
-  background-color: #222;
-  color: #fff;
-  font-size: 14px;
-  bottom: 0;
-  position: fixed;
-  left: 0;
-  right: 0;
-  text-align: center;
-  z-index: 999;
-}
-
-footer p {
-  margin: 10px 0;
-}
-
-footer i {
-  color: red;
-}
-
-footer a {
-  color: #3c97bf;
-  text-decoration: none;
 }
 </style>
