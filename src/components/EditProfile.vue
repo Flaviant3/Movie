@@ -12,6 +12,7 @@
           <button type="submit">Sign Up</button>
         </form>
       </div>
+      <div class="separator"></div>
       <div class="form-container login-container">
         <form @submit.prevent="login">
           <h1>Login</h1>
@@ -21,6 +22,7 @@
           <button type="submit">Login</button>
         </form>
       </div>
+      <div class="separator"></div>
       <div class="form-container profile-update-container">
         <form @submit.prevent="updateProfile">
           <h1>Update Profile</h1>
@@ -40,18 +42,18 @@ export default {
   data() {
     return {
       user: {
-        name: '', // Remplacez username par name
+        name: '',
         email: '',
         password: '',
       },
       profile: {
         email: '',
-        name: '', // Remplacez username par name
+        name: '',
         password: '',
       },
-      message: '', // Pour gérer la notification
-      loginEmail: '', // Email pour la connexion
-      loginPassword: '', // Mot de passe pour la connexion
+      message: '',
+      loginEmail: '',
+      loginPassword: '',
     };
   },
   methods: {
@@ -67,11 +69,11 @@ export default {
 
         const data = await response.json();
         if (response.ok) {
-          this.message = 'Account created successfully!'; // Notification
+          this.message = 'Account created successfully!';
           localStorage.setItem('userId', data.id);
-          localStorage.setItem('name', this.user.name); // Stocker le nom ici
+          localStorage.setItem('name', this.user.name);
           setTimeout(() => {
-            this.message = ''; // Effacer la notification après 3 secondes
+            this.message = '';
           }, 3000);
         } else {
           alert(data.message || 'Error creating account');
@@ -95,13 +97,13 @@ export default {
 
         const data = await response.json();
         if (response.ok) {
-          localStorage.setItem('jwtToken', data.token); // Stocker le token JWT
+          localStorage.setItem('jwtToken', data.token);
           localStorage.setItem('userId', data.id);
-          localStorage.setItem('name', data.email); // Stocker l'email ici
+          localStorage.setItem('name', data.email);
           this.message = 'Login successful!';
           setTimeout(() => {
             this.message = '';
-            window.location.href = '/homepage'; // Redirection après 3 secondes
+            window.location.href = '/homepage';
           }, 3000);
         } else {
           alert(data.message || 'Error logging in');
@@ -118,11 +120,11 @@ export default {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${token}`, // Utilisation du token JWT
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({
             email: this.profile.email,
-            name: this.profile.name, // Remplacez username par name
+            name: this.profile.name,
             password: this.profile.password,
           }),
         });
@@ -149,76 +151,155 @@ export default {
 }
 
 body {
-  background: #141414; /* Fond sombre */
+  background: #f6f5f7;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   font-family: 'Montserrat', sans-serif;
   height: 100vh;
+  margin: -20px 0 50px;
+}
+
+h1 {
+  font-weight: bold;
   margin: 0;
 }
 
-#container {
-  background-color: #222; /* Fond sombre pour le conteneur */
+h2 {
+  text-align: center;
+}
+
+p {
+  font-size: 14px;
+  font-weight: 100;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  margin: 20px 0 30px;
+}
+
+span {
+  font-size: 12px;
+}
+
+a {
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  margin: 15px 0;
+}
+
+button {
+  border-radius: 20px;
+  border: 1px solid #FF4B2B;
+  background-color: #FF4B2B;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:focus {
+  outline: none;
+}
+
+button.ghost {
+  background-color: transparent;
+  border-color: #FFFFFF;
+}
+
+form {
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 50px;
+  height: 100%;
+  text-align: center;
+}
+
+input {
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+}
+
+.container {
+  background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  width: 400px;
-  max-width: 100%;
-  padding: 20px; /* Ajout d'espace intérieur */
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+              0 10px 10px rgba(0,0,0,0.22);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 480px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-h1 {
-  color: #ffffff; /* Texte blanc */
-  margin-bottom: 10px;
-  font-size: 24px; /* Taille de police augmentée */
-}
-
-span {
-  font-size: 12px;
-  color: #aaa; /* Couleur des sous-titres */
-  margin-bottom: 20px; /* Espace sous le sous-titre */
-}
-
 .form-container {
   width: 100%;
+  max-width: 400px;
+  margin: 20px 0;
 }
 
-input {
-  background-color: #333; /* Fond sombre pour les champs */
-  border: none;
-  padding: 12px 15px;
-  margin: 8px 0;
+.separator {
   width: 100%;
-  color: #fff; /* Texte blanc dans les champs */
-  border-radius: 5px; /* Coins arrondis */
-  transition: background-color 0.3s; /* Transition pour l'effet de survol */
+  height: 1px;
+  background-color: #ccc;
+  margin: 20px 0;
 }
 
-input::placeholder {
-  color: #aaa; /* Couleur des placeholders */
+.social-container {
+  margin: 20px 0;
 }
 
-input:focus {
-  outline: none; /* Suppression du contour par défaut */
-  background-color: #444; /* Changement de couleur au focus */
+.social-container a {
+  border: 1px solid #DDDDDD;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  height: 40px;
+  width: 40px;
 }
 
-button {
-  border-radius: 5px;
-  border: none;
-  background-color: #e50914; /* Rouge Netflix */
-  color: #FFFFFF;
-  font-size: 14px; /* Taille de police augmentée */
-  font-weight: bold;
-  padding: 12px 20px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer; /* Curseur pointer */
-  transition: background-color 0.3s, transform 80ms ease-in; /* Ajout de transitions */
-  width: 100%;
+footer {
+  background-color: #222;
+  color: #fff;
+  font-size: 14px;
+  bottom: 0;
+  position: fixed;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 999;
+}
+
+footer p {
+  margin: 10px 0;
+}
+
+footer i {
+  color: red;
+}
+
+footer a {
+  color: #3c97bf;
+  text-decoration: none;
 }
 </style>
