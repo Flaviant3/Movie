@@ -14,7 +14,7 @@
     <h2>Films</h2>
     <div class="movies-list">
       <MovieCard
-        v-for="movie in actor.movies"
+        v-for="movie in movies"
         :key="movie.id"
         :movie="movie"
         @click.native="goToMovieDetails(movie.id)"
@@ -25,7 +25,7 @@
 
 <script>
 import MovieCard from './MovieCard.vue';
-import { fetchActorDetails } from '../services/api';
+import { fetchActorDetails, fetchMovieDetails } from '../services/api';
 
 export default {
   components: {
@@ -37,7 +37,8 @@ export default {
         movies: [],
         awards: [],
         socialLinks: []
-      }
+      },
+      movies: []
     };
   },
   computed: {
@@ -60,6 +61,12 @@ export default {
     async loadActorDetails(actorId) {
       try {
         this.actor = await fetchActorDetails(actorId);
+        this.movies = await Promise.all(
+          this.actor.movies.map(async (movieUrl) => {
+            const movieId = movieUrl.split('/').pop();
+            return await fetchMovieDetails(movieId);
+          })
+        );
       } catch (error) {
         console.error('Erreur lors du chargement des détails de l\'acteur:', error);
       }
