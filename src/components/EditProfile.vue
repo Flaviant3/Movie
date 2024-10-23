@@ -10,7 +10,7 @@
           <input type="email" v-model="loginEmail" placeholder="Email" required />
           <input type="password" v-model="loginPassword" placeholder="Password" required />
           <button type="submit">Login</button>
-          <a href="#" @click.prevent="showPasswordModal">Forgot Password?</a>
+          <a href="#" @click.prevent="showPasswordModal">Mot de passe oublié?</a>
         </form>
       </div>
 
