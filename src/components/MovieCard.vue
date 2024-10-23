@@ -7,7 +7,7 @@
     <div class="rating">
       <span v-for="star in maxStars" :key="star" class="star" :class="{ filled: star <= movie.rating }">★</span>
     </div>
-    <button class="delete-button" @click.stop="deleteMovie">Supprimer</button> <!-- Bouton de suppression -->
+    <button class="delete-button" @click.stop="deleteMovie">Supprimer</button>
   </div>
 </template>
 

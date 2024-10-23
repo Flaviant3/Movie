@@ -49,3 +49,23 @@ export const addActor = async (newActor) => {
     throw error; // Relance l'erreur pour la gérer dans le composant
   }
 };
+
+export const deleteActor = async (actorId) => {
+  const token = getAuthToken();
+
+  if (!token) {
+    console.error('Aucun token d\'authentification trouvé pour la suppression de l\'acteur.');
+    throw new Error('Token manquant');
+  }
+
+  try {
+    await axios.delete(`${API_URL}/${actorId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de l\'acteur:', error);
+    throw error;
+  }
+};

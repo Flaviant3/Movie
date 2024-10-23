@@ -139,5 +139,4 @@ button.confirm.loading:hover {
 .popin.fade-out {
   animation: fadeOut 0.5s ease forwards; /* Animation de sortie */
 }
-
 </style>

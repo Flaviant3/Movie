@@ -28,8 +28,9 @@
         :key="movie.id"
         :movie="movie"
         @click="handleMovieClick(movie)"
-        @delete="confirmDelete(movie.id)"/>
-      <button v-if="filteredMovies.length === 0">Aucun film trouvé.</button>
+        @delete="confirmDelete(movie.id)"
+      />
+      <button v-if="filteredMovies.length === 0">Aucun film trouvé. Pensez a vous connectez!</button>
     </div>
 
     <Pagination
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-import { getMovies } from '@/services/movieService.js';
+import { getMovies, addMovie, deleteMovie } from '@/services/movieService.js';
 import MovieCard from './MovieCard.vue';
 import AddMovieForm from './AddMovieForm.vue';
 import PopinConfirmation from './PopinConfirmation.vue';
@@ -85,7 +86,7 @@ export default {
     },
     async addMovie(newMovie) {
       try {
-        const addedMovie = await addMovieService(newMovie);
+        const addedMovie = await addMovie(newMovie);
         this.movies.push(addedMovie);
         alert('Film ajouté avec succès !');
       } catch (error) {
@@ -102,8 +103,10 @@ export default {
         await deleteMovie(movieId);
         this.movies = this.movies.filter(movie => movie.id !== movieId);
         this.isConfirmationVisible = false;
+        alert('Film supprimé avec succès !'); // Alerte de succès
       } catch (error) {
         alert('Erreur lors de la suppression du film. Veuillez réessayer.');
+        console.error('Erreur:', error); // Affichage de l'erreur dans la console
       }
     },
     updatePage(newPage) {
@@ -140,91 +143,74 @@ export default {
 </script>
 
 <style scoped>
-
 .sort-select {
-  margin-bottom: 20px; /* Marge en bas pour le sélecteur de tri */
-  padding: 10px; /* Espacement intérieur */
-  border: 1px solid #ccc; /* Bordure */
-  border-radius: 5px; /* Coins arrondis */
-  font-size: 1em; /* Taille de la police */
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
 }
 
 .add-movie-button {
-  background-color: #28a745; /* Couleur verte */
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 10px 15px; /* Espacement autour du texte */
+  padding: 10px 15px;
   cursor: pointer;
-  font-size: 1em; /* Taille de la police */
-  transition: background-color 0.3s, transform 0.3s; /* Transition pour l'effet */
+  font-size: 1em;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .add-movie-button:hover {
-  background-color: #218838; /* Couleur plus foncée au survol */
-  transform: scale(1.05); /* Légère augmentation de taille au survol */
+  background-color: #218838;
+  transform: scale(1.05);
 }
 
 .add-movie-button:focus {
-  outline: none; /* Supprimer le contour par défaut */
+  outline: none;
 }
 
 .movies-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
-  gap: 15px; /* Espace entre les cartes */
-  padding: 20px; /* Padding autour de la grille */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  padding: 20px;
 }
 
 .movie-card {
-  background-color: #fefefe; /* Fond légèrement gris */
-  border: none; /* Suppression de la bordure pour un look plus moderne */
-  border-radius: 8px; /* Coins arrondis */
+  background-color: #fefefe;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s; /* Transition pour l'effet */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
-  overflow: hidden; /* Pour éviter que le contenu déborde */
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .movie-card:hover {
-  transform: scale(1.05); /* Légère augmentation de taille au survol */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 .movie-image {
-  width: 100%; /* Largeur 100% pour remplir la carte */
-  height: 180px; /* Hauteur réduite pour un affichage compact */
-  object-fit: cover; /* Garde le ratio d'aspect */
-  border-radius: 8px 8px 0 0; /* Coins arrondis en haut */
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
 }
 
 .search-input {
-  width: 50%; /* Largeur 100% pour le champ de recherche */
-  padding: 10px; /* Espacement intérieur */
-  margin-bottom: 20px; /* Marge en bas */
-  border: 1px solid #ccc; /* Bordure */
-  border-radius: 5px; /* Coins arrondis */
-  font-size: 1em; /* Taille de la police */
-}
-
-h3 {
-  margin: 10px 0 5px; /* Marges pour le titre */
-  font-size: 1em; /* Taille de police du titre réduite */
-  text-align: center; /* Alignement centré */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-p {
-  margin: 0 0 10px; /* Marges pour la description */
-  font-size: 0.8em; /* Taille de police pour la description réduite */
-  color: #555; /* Couleur de texte pour la description */
-  text-align: center; /* Alignement centré */
+  width: 50%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
 }
 
 h1 {
-  text-align: center; /* Centrer le titre */
-  margin-bottom: 20px; /* Marge en bas */
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

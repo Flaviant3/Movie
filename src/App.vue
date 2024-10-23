@@ -28,12 +28,12 @@ export default {
   },
   created() {
     // Récupérer l'email lors de la création du composant
-    this.email = localStorage.getItem('username') || ''; // Remplacez 'username' par le nom de la clé contenant l'email
+    this.email = localStorage.getItem('name') || ''; // Remplacez 'username' par le nom de la clé contenant l'email
   },
   methods: {
     logout() {
       localStorage.removeItem('userId'); // Suppression de l'ID utilisateur
-      localStorage.removeItem('username'); // Suppression de l'email
+      localStorage.removeItem('name'); // Suppression de l'email
       this.email = ''; // Réinitialiser l'email dans le composant
       this.$router.push('/'); // Redirection vers la page d'accueil
       alert('Vous êtes déconnecté.'); // Message de confirmation

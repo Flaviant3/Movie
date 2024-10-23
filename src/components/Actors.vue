@@ -21,30 +21,41 @@
         :key="actor.id"
         :actor="actor"
         @click="handleActorClick(actor)"
+        @delete="confirmDelete(actor.id)"
       />
     </div>
+
+    <PopinConfirmation
+      v-if="isConfirmationVisible"
+      @confirm="deleteActor(selectedActorId)"
+      @cancel="isConfirmationVisible = false"
+    />
   </div>
 </template>
 
 <script>
-import { getActors, addActor } from '../services/actorService'; // Importer le service
+import { getActors, addActor, deleteActor } from '../services/actorService';
 import ActorCard from './ActorCard.vue';
 import AddActorForm from './AddActorForm.vue';
+import PopinConfirmation from './PopinConfirmation.vue';
 
 export default {
   components: {
     ActorCard,
-    AddActorForm
+    AddActorForm,
+    PopinConfirmation
   },
   data() {
     return {
       actors: [],
       searchQuery: '',
-      isAddActorVisible: false // État pour afficher le formulaire d'ajout
+      isAddActorVisible: false,
+      isConfirmationVisible: false,
+      selectedActorId: null
     };
   },
   async created() {
-    this.actors = await getActors(); // Récupérer la liste des acteurs
+    this.actors = await getActors();
   },
   computed: {
     filteredActors() {
@@ -58,16 +69,31 @@ export default {
       this.$router.push({ name: 'ActorDetails', params: { id: actor.id } });
     },
     showAddActorForm() {
-      this.isAddActorVisible = true; // Afficher le formulaire d'ajout
+      this.isAddActorVisible = true;
     },
     async addActor(newActor) {
       try {
         const addedActor = await addActor(newActor);
-        this.actors.push(addedActor); // Ajouter l'acteur à la liste
+        this.actors.push(addedActor);
         alert('Acteur ajouté avec succès !');
       } catch (error) {
         console.error('Erreur lors de l\'ajout de l\'acteur:', error.response ? error.response.data : error);
         alert('Erreur lors de l\'ajout de l\'acteur. Veuillez vérifier les données et réessayer.');
+      }
+    },
+    confirmDelete(actorId) {
+      this.selectedActorId = actorId;
+      this.isConfirmationVisible = true;
+    },
+    async deleteActor(actorId) {
+      try {
+        await deleteActor(actorId);
+        this.actors = this.actors.filter(actor => actor.id !== actorId);
+        this.isConfirmationVisible = false;
+        alert('Acteur supprimé avec succès !');
+      } catch (error) {
+        alert('Erreur lors de la suppression de l\'acteur. Veuillez réessayer.');
+        console.error('Erreur:', error);
       }
     }
   }
@@ -76,70 +102,70 @@ export default {
 
 <style scoped>
 body {
-  background-color: #141414; /* Fond sombre pour correspondre à l'esthétique Netflix */
-  color: #ffffff; /* Texte blanc pour un bon contraste */
+  background-color: #141414;
+  color: #ffffff;
 }
 
 h1 {
   text-align: center;
-  color: #e50914; /* Rouge Netflix pour le titre principal */
+  color: #e50914;
   margin-bottom: 20px;
 }
 
 .actors-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Colonnes adaptatives */
-  gap: 20px; /* Espace entre les cartes */
-  padding: 20px; /* Padding autour de la grille */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .search-input {
-  width: 100%; /* Largeur 100% pour le champ de recherche */
-  padding: 10px; /* Espacement intérieur */
-  margin-bottom: 20px; /* Marge en bas */
-  border: 1px solid #555; /* Bordure sombre */
-  border-radius: 5px; /* Coins arrondis */
-  font-size: 1em; /* Taille de la police */
-  background-color: #333; /* Fond sombre pour le champ de recherche */
-  color: #fff; /* Texte blanc */
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: #333;
+  color: #fff;
 }
 
 .search-input::placeholder {
-  color: #aaa; /* Couleur des placeholders */
+  color: #aaa;
 }
 
 .actor-card {
-  background-color: #222; /* Fond sombre pour les cartes d'acteurs */
-  border: none; /* Suppression de la bordure pour un look plus moderne */
-  border-radius: 8px; /* Coins arrondis */
+  background-color: #222;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s; /* Transition pour l'effet */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Ombre légère */
-  overflow: hidden; /* Pour éviter que le contenu déborde */
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 
 .actor-card:hover {
-  transform: scale(1.05); /* Légère augmentation de taille au survol */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7); /* Ombre plus prononcée au survol */
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
 }
 
 .actor-image {
-  width: 100%; /* Largeur 100% pour remplir la carte */
-  height: 180px; /* Hauteur réduite pour un affichage compact */
-  object-fit: cover; /* Garde le ratio d'aspect */
-  border-radius: 8px 8px 0 0; /* Coins arrondis en haut */
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
 }
 
 h3 {
-  margin: 10px 0 5px; /* Marges pour le titre */
-  font-size: 1.2em; /* Taille de police du titre */
-  text-align: center; /* Alignement centré */
+  margin: 10px 0 5px;
+  font-size: 1.2em;
+  text-align: center;
 }
 
 p {
-  margin: 0 0 10px; /* Marges pour la description */
-  font-size: 0.9em; /* Taille de police pour la description */
-  color: #ddd; /* Couleur de texte pour la description */
-  text-align: center; /* Alignement centré */
+  margin: 0 0 10px;
+  font-size: 0.9em;
+  color: #ddd;
+  text-align: center;
 }
 </style>

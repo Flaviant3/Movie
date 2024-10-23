@@ -73,8 +73,6 @@ export default {
         });
 
         const data = await response.json();
-        console.log('Réponse d\'inscription:', data);
-
         if (response.ok) {
           this.message = 'Compte créé avec succès!';
           localStorage.setItem('userId', data.id);
@@ -102,8 +100,6 @@ export default {
         });
 
         const data = await response.json();
-        console.log('Login Response:', data);
-
         if (response.ok) {
           localStorage.setItem('jwtToken', data.token);
           localStorage.setItem('userId', data.id);
@@ -134,14 +130,13 @@ export default {
     },
     async verifyEmail() {
       try {
-        // Vérifie d'abord que l'email est bien renseigné
         if (!this.emailForPasswordChange) {
           alert('Veuillez entrer un email.');
           return;
         }
 
-        // Envoie la requête à l'API pour vérifier l'email
-        const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users`, {
+        // Envoie la requête pour vérifier l'email
+        const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users?email=${encodeURIComponent(this.emailForPasswordChange)}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -150,14 +145,12 @@ export default {
 
         const data = await response.json();
 
-        if (response.ok && data.length > 0) {
-          this.userId = data[0].id; // Récupère l'ID utilisateur
-          alert('Email vérifié. Vous pouvez maintenant changer votre mot de passe.');
-        } else if (data.length === 0) {
+        if (response.ok && data['hydra:member'].length > 0) {
+          this.userId = data['hydra:member'][0].id; // Récupère l'ID utilisateur
+          alert(`Email trouvé : ${data['hydra:member'][0].email}`); // Affiche l'email trouvé
+        } else {
           alert('Email non trouvé. Veuillez vérifier l\'adresse entrée.');
           this.userId = null; // Réinitialiser si l'email n'est pas trouvé
-        } else {
-          alert(data.message || 'Erreur lors de la vérification de l\'email');
         }
       } catch (error) {
         console.error('Erreur lors de la requête:', error);
@@ -177,7 +170,6 @@ export default {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/merge-patch+json',
-            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({ password: this.newPassword }),
         });
@@ -194,7 +186,7 @@ export default {
       }
     }
   }
-  };
+};
 </script>
 
 <style scoped>

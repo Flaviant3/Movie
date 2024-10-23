@@ -37,7 +37,6 @@ export const getMovies = async () => {
   }
 };
 
-
 export const addMovie = async (movieData) => {
   const token = getAuthToken();
 

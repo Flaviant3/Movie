@@ -69,7 +69,7 @@
           class="actor-card"
           @click="goToActorDetails(actor.id)">
           <img v-if="actor.media" :src="actor.media" alt="Photo de l'acteur" class="actor-image" />
-          <p><strong>Nom :</strong> {{ actor.lastname }}</p>
+          <p><strong>Nom :</strong> {{ actor.lastname }} {{ actor.firstname }}</p>
           <p><strong>Date de naissance :</strong> {{ actor.dob }}</p>
           <p><strong>Nationalité :</strong> {{ actor.nationality }}</p>
           <p><strong>Biographie :</strong> {{ actor.bio }}</p>
@@ -113,7 +113,6 @@ export default {
     async updateMovie() {
       try {
         this.movie.rating = parseFloat(this.movie.rating);
-        console.log(this.movie); // Vérifiez les données ici
         await movieServiceUpdate(this.movie.id, this.movie);
         this.isEditing = false; // Fermer le mode édition après la sauvegarde
       } catch (error) {

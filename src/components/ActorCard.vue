@@ -8,6 +8,7 @@
     <div class="rating">
       <span v-for="star in maxStars" :key="star" class="star" :class="{ filled: star <= actor.rating }">★</span>
     </div>
+    <button class="delete-button" @click.stop="confirmDelete">Supprimer</button>
   </div>
 </template>
 
@@ -28,6 +29,9 @@ export default {
   methods: {
     handleClick() {
       this.$emit('click');
+    },
+    confirmDelete() {
+      this.$emit('delete', this.actor.id); // Émettre l'événement de suppression avec l'ID de l'acteur
     }
   }
 };
@@ -93,10 +97,21 @@ p {
 .star:hover {
   cursor: pointer;
   color: #ffcc00; /* Couleur survolée */
+  transition: color 0.2s;
 }
 
-/* Ajout d'une animation pour les étoiles */
-.star {
-  transition: color 0.2s;
+.delete-button {
+  background-color: #dc3545; /* Couleur rouge pour le bouton de suppression */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-top: 10px; /* Espace au-dessus du bouton */
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #c82333; /* Couleur au survol */
 }
 </style>

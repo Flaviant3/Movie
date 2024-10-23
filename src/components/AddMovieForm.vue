@@ -48,7 +48,7 @@
       <label for="actors">Acteurs :</label>
       <select v-model="selectedActors" multiple>
         <option v-for="actor in actors" :key="actor.id" :value="actor['@id']">
-          {{ actor.lastname }} <!-- Affiche le nom de famille -->
+          {{ actor.lastname }}
         </option>
       </select>
     </div>
@@ -75,22 +75,29 @@ export default {
       genre: '',
       saga: '',
       selectedActors: [],
-      actors: [] // Liste des acteurs
+      actors: []
     };
   },
   created() {
-    this.fetchActors(); // Récupérer les acteurs lors de la création du composant
+    this.fetchActors();
   },
   methods: {
     async fetchActors() {
       try {
         const response = await axios.get('http://symfony.mmi-troyes.fr:8319/api/actors');
-        this.actors = response.data['hydra:member']; // Accédez aux acteurs ici
+        this.actors = response.data['hydra:member'];
       } catch (error) {
         console.error('Erreur lors de la récupération des acteurs:', error);
       }
     },
     async submitForm() {
+      const token = localStorage.getItem('jwtToken');
+
+      if (!token) {
+        alert('Vous devez être connecté pour ajouter un film.');
+        return;
+      }
+
       const newMovie = {
         title: this.title,
         description: this.description,
@@ -104,18 +111,23 @@ export default {
         genre: this.genre,
         saga: this.saga,
         created_at: new Date().toISOString(),
-        movie_actor: this.selectedActors // Utilisez les IRIs ici
+        movie_actor: this.selectedActors
       };
 
-      console.log(newMovie); // Vérifiez la structure ici
+      console.log(newMovie);
 
       try {
-        await addMovie(newMovie);
+        await axios.post('http://symfony.mmi-troyes.fr:8319/api/movies', newMovie, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         this.resetForm();
         this.$emit('close');
       } catch (error) {
-        console.error('Erreur lors de l\'ajout du film:', error.response.data); // Affichez l'erreur
-        alert('Une erreur est survenue lors de l\'ajout du film.'); // Alerte utilisateur
+        console.error('Erreur lors de l\'ajout du film:', error.response.data);
+        alert('Une erreur est survenue lors de l\'ajout du film.');
       }
     },
     resetForm() {
@@ -130,7 +142,7 @@ export default {
       this.studio = '';
       this.genre = '';
       this.saga = '';
-      this.selectedActors = []; // Réinitialiser les acteurs sélectionnés
+      this.selectedActors = [];
     }
   }
 };
@@ -138,56 +150,56 @@ export default {
 
 <style>
 form {
-  background-color: #f9f9f9; /* Fond légèrement gris */
-  padding: 20px; /* Espacement intérieur */
-  border-radius: 8px; /* Coins arrondis */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère */
-  max-width: 600px; /* Largeur maximale du formulaire */
-  margin: 20px auto; /* Centrer le formulaire */
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
 }
 
 form div {
-  margin-bottom: 15px; /* Marge en bas pour chaque champ */
+  margin-bottom: 15px;
 }
 
 label {
-  display: block; /* Afficher les labels en bloc */
-  margin-bottom: 5px; /* Marge en bas pour les labels */
-  font-weight: bold; /* Mettre les labels en gras */
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 input[type="text"],
 input[type="date"],
 input[type="number"],
 textarea {
-  width: 100%; /* Largeur 100% pour les champs */
-  padding: 10px; /* Espacement intérieur */
-  border: 1px solid #ccc; /* Bordure */
-  border-radius: 5px; /* Coins arrondis */
-  font-size: 1em; /* Taille de la police */
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
 }
 
 textarea {
-  resize: vertical; /* Permettre le redimensionnement vertical */
+  resize: vertical;
 }
 
 button[type="submit"] {
-  background-color: #007bff; /* Couleur bleue */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 10px 15px; /* Espacement autour du texte */
+  padding: 10px 15px;
   cursor: pointer;
-  font-size: 1em; /* Taille de la police */
-  transition: background-color 0.3s, transform 0.3s; /* Transition pour l'effet */
+  font-size: 1em;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 button[type="submit"]:hover {
-  background-color: #0056b3; /* Couleur plus foncée au survol */
-  transform: scale(1.05); /* Légère augmentation de taille au survol */
+  background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 button[type="submit"]:focus {
-  outline: none; /* Supprimer le contour par défaut */
+  outline: none;
 }
 </style>
