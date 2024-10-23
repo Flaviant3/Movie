@@ -6,7 +6,6 @@ import Movies from '../components/Movies.vue';
 import Actors from '../components/Actors.vue';
 import Categories from '../components/Categories.vue';
 import EditProfile from '../components/EditProfile.vue';
-import Login from '../components/Login.vue';
 import MovieDetails from '../components/MovieDetails.vue';
 import ActorDetails from '../components/ActorDetails.vue';
 
@@ -21,6 +20,5 @@ export default new Router({
     { path: '/actors', name: 'Actors', component: Actors },
     { path: '/categories', name: 'Categories', component: Categories },
     { path: '/edit-profile', name: 'EditProfile', component: EditProfile },
-    { path: '/login', name: 'Login', component: Login },
   ]
 });
