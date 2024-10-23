@@ -68,58 +68,52 @@ export default {
     };
   },
   created() {
-    this.fetchActors(); // Récupérer les acteurs lors de la création du composant
+    this.fetchActors();
   },
   methods: {
     async fetchActors() {
       try {
         const response = await axios.get('http://symfony.mmi-troyes.fr:8319/api/actors');
-        this.actors = response.data['hydra:member']; // Accédez aux acteurs ici
+        this.actors = response.data['hydra:member'];
       } catch (error) {
         console.error('Erreur lors de la récupération des acteurs:', error);
       }
     },
     async submit() {
-      const token = localStorage.getItem('jwtToken'); // Récupérer le token
+      const token = localStorage.getItem('jwtToken');
 
       if (!token) {
         alert('Vous devez être connecté pour ajouter un acteur.');
         return;
       }
 
-      // Vérifiez que tous les champs obligatoires sont remplis
       if (this.firstname && this.lastname && this.dob && this.gender && this.nationality && this.media && this.bio) {
         const newActor = {
           firstname: this.firstname,
           lastname: this.lastname,
           dob: this.dob,
-          awards: this.awards !== null ? parseInt(this.awards) : undefined, // Convertir en entier ou undefined
+          awards: this.awards !== null ? parseInt(this.awards) : undefined,
           bio: this.bio,
           nationality: this.nationality,
           media: this.media,
           gender: this.gender
         };
 
-        console.log(newActor); // Afficher les données envoyées
-
         try {
           const response = await axios.post('http://symfony.mmi-troyes.fr:8319/api/actors', newActor, {
             headers: {
-              'Authorization': `Bearer ${token}`, // Inclure le token dans les en-têtes
+              'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
             }
           });
 
-          console.log('Acteur ajouté avec succès:', response.data); // Afficher la réponse de l'API
-          this.resetForm(); // Réinitialiser le formulaire
-          this.fetchActors(); // Rafraîchir la liste des acteurs
-          this.$emit('actor-added'); // Émettre un événement après ajout
+          this.resetForm();
+          this.fetchActors();
+          this.$emit('actor-added');
         } catch (error) {
           if (error.response) {
-            console.error('Erreur lors de l\'ajout de l\'acteur:', error.response.data); // Afficher les détails de l'erreur
             alert(`Une erreur est survenue lors de l'ajout de l'acteur. Code d'erreur: ${error.response.status}. Détails: ${error.response.data.message}`);
           } else {
-            console.error('Erreur lors de l\'ajout de l\'acteur:', error.message);
             alert('Une erreur est survenue lors de l\'ajout de l\'acteur.');
           }
         }
@@ -141,50 +135,68 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .add-actor-form {
-  background-color: #f9f9f9; /* Fond légèrement gris */
-  padding: 20px; /* Espacement int��rieur */
-  border-radius: 8px; /* Coins arrondis */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère */
-  max-width: 400px; /* Largeur maximale du formulaire */
-  margin: 20px auto; /* Centrer le formulaire */
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 20px auto;
+  color: #000;
+}
+
+h2 {
+  color: #ff6f61;
+  text-align: center;
 }
 
 input, textarea, select {
-  width: 100%; /* Largeur 100% pour les champs */
-  padding: 10px; /* Espacement intérieur */
-  border: 1px solid #ccc; /* Bordure */
-  border-radius: 5px; /* Coins arrondis */
-  margin-bottom: 10px; /* Marge en bas pour chaque champ */
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #3a3a3a;
+  color: #ffffff;
 }
 
 button {
-  background-color: #007bff; /* Couleur bleue */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 10px 15px; /* Espacement autour du texte */
+  padding: 10px 15px;
   cursor: pointer;
-  font-size: 1em; /* Taille de la police */
-  transition: background-color 0.3s, transform 0.3s; /* Transition pour l'effet */
+  font-size: 1em;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 button:hover {
-  background-color: #0056b3; /* Couleur plus foncée au survol */
-  transform: scale(1.05); /* Légère augmentation de taille au survol */
+  background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 button:focus {
-  outline: none; /* Supprimer le contour par défaut */
+  outline: none;
 }
 
 ul {
-  list-style-type: none; /* Supprimer les puces de la liste */
-  padding: 0; /* Supprimer le padding */
+  list-style-type: none;
+  padding: 0;
 }
 
 li {
-  margin: 5px 0; /* Marge pour chaque élément de la liste */
+  margin: 5px 0;
 }
 </style>

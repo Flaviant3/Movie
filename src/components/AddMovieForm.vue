@@ -148,14 +148,25 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 form {
-  background-color: #f9f9f9;
+  background-color: #2a2a2a;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   margin: 20px auto;
+  color: #ffffff;
 }
 
 form div {
@@ -166,17 +177,21 @@ label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #ff6f61;
 }
 
 input[type="text"],
 input[type="date"],
 input[type="number"],
-textarea {
+textarea,
+select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 1em;
+  margin-bottom: 10px;
+  background-color: #3a3a3a;
+  color: #ffffff;
 }
 
 textarea {

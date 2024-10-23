@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     handleClick() {
-      this.$emit('click');
+      this.$router.push({ name: 'ActorDetails', params: { id: this.actor.id } });
     },
     confirmDelete() {
       this.$emit('delete', this.actor.id); // Émettre l'événement de suppression avec l'ID de l'acteur
@@ -38,80 +38,102 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .actor-card {
   border: none;
   padding: 20px;
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  background-color: #222; /* Fond sombre pour correspondre à l'esthétique Netflix */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  background-color: #2a2a2a; /* Dark background for modern look */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Light shadow */
   position: relative;
   overflow: hidden;
   text-align: center;
+  color: #ffffff; /* White text for contrast */
 }
 
 .actor-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
 }
 
 .actor-image {
   width: 200px;
-  height: 200px; /* Taille de l'image ajustée */
-  object-fit: cover; /* Remplit l'espace sans déformer l'image */
-  border-radius: 50%; /* Rendre l'image complètement ronde */
+  height: 200px; /* Adjusted image size */
+  object-fit: cover; /* Fill space without distorting image */
+  border-radius: 50%; /* Make image completely round */
   transition: transform 0.3s;
 }
 
 .actor-image:hover {
-  transform: scale(1.05); /* Zoom léger sur l'image au survol */
+  transform: scale(1.05); /* Slight zoom on hover */
 }
 
 h3 {
   font-size: 1.5em;
   margin: 10px 0;
-  color: #e50914; /* Rouge Netflix pour les titres */
+  color: #ff6f61; /* Vibrant color for titles */
 }
 
 p {
   margin: 5px 0;
-  color: #ddd; /* Texte gris clair pour les descriptions */
+  color: #ddd; /* Light grey text for descriptions */
   line-height: 1.5;
 }
 
 .rating {
-  margin-top: 10px; /* Espace au-dessus de la note */
+  margin-top: 10px; /* Space above rating */
   text-align: center;
 }
 
 .star {
-  color: #555; /* Couleur par défaut des étoiles */
-  font-size: 1.5em; /* Taille des étoiles */
+  color: #555; /* Default star color */
+  font-size: 1.5em; /* Star size */
 }
 
 .star.filled {
-  color: #ffcc00; /* Couleur des étoiles remplies */
+  color: #ffcc00; /* Filled star color */
 }
 
 .star:hover {
   cursor: pointer;
-  color: #ffcc00; /* Couleur survolée */
+  color: #ffcc00; /* Hover color */
   transition: color 0.2s;
 }
 
 .delete-button {
-  background-color: #dc3545; /* Couleur rouge pour le bouton de suppression */
+  background-color: #dc3545; /* Red color for delete button */
   color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
-  margin-top: 10px; /* Espace au-dessus du bouton */
+  margin-top: 10px; /* Space above button */
   transition: background-color 0.3s;
 }
 
 .delete-button:hover {
-  background-color: #c82333; /* Couleur au survol */
+  background-color: #c82333; /* Hover color */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

@@ -9,7 +9,7 @@
         <router-link to="/categories" class="nav-link">Categories</router-link>
       </div>
       <div class="profile-actions">
-        <span class="email" v-if="email">{{ email }}</span> <!-- Afficher l'email uniquement s'il est présent -->
+        <span class="email" v-if="email">{{ email }}</span>
         <router-link to="/edit-profile" class="edit-profile">Modifier Profil</router-link>
         <button v-if="email" class="logout" @click="logout">Logout</button>
       </div>
@@ -27,95 +27,158 @@ export default {
     };
   },
   created() {
-    // Récupérer l'email lors de la création du composant
-    this.email = localStorage.getItem('name') || ''; // Remplacez 'username' par le nom de la clé contenant l'email
+    this.email = localStorage.getItem('name') || '';
   },
   methods: {
     logout() {
-      localStorage.removeItem('userId'); // Suppression de l'ID utilisateur
-      localStorage.removeItem('name'); // Suppression de l'email
-      this.email = ''; // Réinitialiser l'email dans le composant
-      this.$router.push('/'); // Redirection vers la page d'accueil
-      alert('Vous êtes déconnecté.'); // Message de confirmation
+      localStorage.removeItem('userId');
+      localStorage.removeItem('name');
+      this.email = '';
+      this.$router.push('/');
+      alert('Vous êtes déconnecté.');
     }
   }
 };
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: #141414; /* Couleur sombre comme Netflix */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  padding: 20px 40px;
+  background-color: #1f1f1f;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+nav:hover {
+  background-color: #2a2a2a;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: #e50914; /* Rouge Netflix */
+  color: #ff6f61;
   cursor: pointer;
+  transition: color 0.3s;
+}
+
+.logo:hover {
+  color: #ff3b2f;
 }
 
 .nav-links {
   display: flex;
-  gap: 20px; /* Espacement entre les liens */
+  gap: 30px;
 }
 
 .nav-link {
-  color: #ffffff; /* Texte blanc */
+  color: #ffffff;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
   position: relative;
-  transition: color 0.3s ease;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.nav-link::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #ff6f61;
+  transition: width 0.3s;
+}
+
+.nav-link:hover::after {
+  width: 100%;
 }
 
 .nav-link:hover {
-  color: #e50914; /* Changement de couleur au survol */
+  color: #ff6f61;
+  transform: scale(1.1);
 }
 
 .profile-actions {
   display: flex;
-  align-items: center; /* Alignement vertical */
+  align-items: center;
 }
 
 .edit-profile {
-  padding: 10px 15px;
-  background-color: #e50914; /* Rouge Netflix */
+  padding: 10px 20px;
+  background-color: #ff6f61;
   color: #ffffff;
   border-radius: 5px;
   text-decoration: none;
-  transition: background-color 0.3s ease;
-  margin-right: 10px; /* Espace entre Modifier Profil et Logout */
+  transition: background-color 0.3s, transform 0.3s;
+  margin-right: 15px;
 }
 
 .edit-profile:hover {
-  background-color: #f40612; /* Couleur plus foncée au survol */
+  background-color: #ff3b2f;
+  transform: translateY(-2px);
 }
 
 .logout {
-  padding: 10px 15px;
-  background-color: #e50914; /* Rouge Netflix */
+  padding: 10px 20px;
+  background-color: #ff6f61;
   color: #ffffff;
   border: none;
   border-radius: 5px;
-  cursor: pointer; /* Curseur pointer */
-  transition: background-color 0.3s ease;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .logout:hover {
-  background-color: #f40612; /* Couleur plus foncée au survol */
+  background-color: #ff3b2f;
+  transform: translateY(-2px);
 }
 
 .email {
-  color: #ffffff; /* Couleur du texte de l'email */
-  margin-right: 15px; /* Espacement entre l'email et les actions */
+  color: #ffffff;
+  margin-right: 20px;
+  font-size: 1.1rem;
+  transition: color 0.3s;
+}
+
+.email:hover {
+  color: #ff6f61;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+.router-view {
+  animation: fadeIn 0.5s ease-in-out;
 }
 </style>

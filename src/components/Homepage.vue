@@ -80,33 +80,42 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 .homepage {
   color: #ffffff;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #141414; /* Fond sombre pour correspondre à la navbar */
+  background-color: #1a1a1a; /* Fond sombre */
+  font-family: 'Roboto', sans-serif;
+  animation: fadeIn 1s ease-in-out;
 }
 
 h1 {
   text-align: center;
   margin-bottom: 20px;
   font-size: 2.5em;
-  color: #e50914; /* Rouge Netflix */
+  color: #ff6f61; /* Couleur vive */
+  animation: slideInFromLeft 1s ease-in-out;
 }
 
 h2 {
   font-size: 1.8em;
   margin-bottom: 10px;
-  color: #e50914; /* Rouge Netflix */
+  color: #ff6f61; /* Couleur vive */
+  animation: slideInFromRight 1s ease-in-out;
 }
 
 .carousel {
   position: relative;
   overflow: hidden;
   height: 80vh; /* Ajuster la hauteur du carrousel */
-  border-radius: 0;
+  border-radius: 10px;
   margin-bottom: 20px;
+  background-color: #2a2a2a; /* Fond sombre pour le carrousel */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
 }
 
 .carousel-images {
@@ -129,12 +138,13 @@ h2 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px 10px 0 0;
-  transition: transform 0.3s;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .movie-image:hover {
   transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 h3 {
@@ -153,7 +163,10 @@ p {
 
 .actors-section {
   padding: 20px;
-  background-color: #222; /* Fond sombre pour la section des acteurs */
+  background-color: #2a2a2a; /* Fond sombre pour la section des acteurs */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
 }
 
 .actors-list {
@@ -167,10 +180,44 @@ p {
   background-color: #333; /* Fond sombre pour les cartes d'acteurs */
   border-radius: 5px;
   padding: 10px;
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .actor-card:hover {
   transform: scale(1.05); /* Effet de zoom au survol */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>

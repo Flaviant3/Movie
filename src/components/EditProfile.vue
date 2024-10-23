@@ -3,19 +3,6 @@
     <div id="container">
       <div v-if="message" class="notification">{{ message }}</div>
 
-      <div class="form-container sign-up-container">
-        <form @submit.prevent="signUp">
-          <h1>Create Account</h1>
-          <span>or use your email for registration</span>
-          <input type="text" v-model="user.name" placeholder="Name" required />
-          <input type="email" v-model="user.email" placeholder="Email" required />
-          <input type="password" v-model="user.password" placeholder="Password" required />
-          <button type="submit">Sign Up</button>
-        </form>
-      </div>
-
-      <div class="separator"></div>
-
       <div class="form-container login-container">
         <form @submit.prevent="login">
           <h1>Login</h1>
@@ -26,11 +13,25 @@
           <a href="#" @click.prevent="showPasswordModal">Forgot Password?</a>
         </form>
       </div>
+
+      <div class="separator"></div>
+
+      <div class="form-container sign-up-container">
+        <form @submit.prevent="signUp">
+          <h1>Create Account</h1>
+          <span>or use your email for registration</span>
+          <input type="text" v-model="user.name" placeholder="Name" required />
+          <input type="email" v-model="user.email" placeholder="Email" required />
+          <input type="password" v-model="user.password" placeholder="Password" required />
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
     </div>
 
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closePasswordModal">&times;</span>
+        <button class="back" @click="closePasswordModal">Back</button>
         <h2>Change Password</h2>
         <input type="email" v-model="emailForPasswordChange" placeholder="Email" required />
         <button @click="verifyEmail">Next</button>
@@ -190,120 +191,258 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-* {
-  box-sizing: border-box;
+#container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  color: #ffffff;
+  animation: fadeIn 1s ease-in-out;
 }
 
-body {
-  background: #f6f5f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-family: 'Montserrat', sans-serif;
-  height: 100vh;
-  margin: -20px 0 50px;
+.notification {
+  background-color: #ff6f61;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  animation: slideInFromTop 0.5s ease-in-out;
+}
+
+.form-container {
+  width: 45%;
+  padding: 20px;
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
 }
 
 h1 {
-  font-weight: bold;
-  margin: 0;
-}
-
-h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #ff6f61;
   text-align: center;
+  animation: slideInFromLeft 0.5s ease-in-out;
 }
 
 span {
-  font-size: 12px;
+  display: block;
+  margin-bottom: 20px;
+  color: #dddddd;
+  text-align: center;
+  animation: slideInFromRight 0.5s ease-in-out;
 }
 
-a {
-  color: #FF4B2B;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 15px 0;
-  cursor: pointer;
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #ffffff;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+  background-color: #444;
+  transform: scale(1.05);
 }
 
 button {
-  border-radius: 20px;
-  border: 1px solid #FF4B2B;
-  background-color: #FF4B2B;
-  color: #FFFFFF;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 12px 45px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: transform 80ms ease-in;
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
-button:focus {
-  outline: none;
-}
-
-form {
-  background-color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 50px;
-  height: 100%;
-  text-align: center;
-}
-
-input {
-  background-color: #eee;
-  border: none;
-  padding: 12px 15px;
-  margin: 8px 0;
   width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff6f61;
+  color: #ffffff;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+  background-color: #e65c50;
+  transform: scale(1.05);
+}
+
+a {
+  color: #ff6f61;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: #e65c50;
 }
 
 .separator {
-  width: 100%;
-  height: 1px;
-  background-color: #ccc;
-  margin: 20px 0;
+  width: 1px;
+  height: 100%;
+  background-color: #444;
+  margin: 0 20px;
+  animation: fadeIn 1s ease-in-out;
 }
 
-/* Styles pour la modale */
 .modal {
   position: fixed;
-  z-index: 1000;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 .modal-content {
-  background-color: #fff;
-  border-radius: 10px;
+  background-color: #2a2a2a;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 400px;
   text-align: center;
+  animation: slideInFromBottom 0.5s ease-in-out;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  color: #ff6f61;
+  animation: slideInFromTop 0.5s ease-in-out;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #ffffff;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.modal-content input:focus {
+  background-color: #444;
+  transform: scale(1.05);
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff6f61;
+  color: #ffffff;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.modal-content button:hover {
+  background-color: #e65c50;
+  transform: scale(1.05);
 }
 
 .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5em;
   cursor: pointer;
+  color: #ffffff;
+  transition: transform 0.3s;
+}
+
+.close:hover {
+  transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.back {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 1em;
+  cursor: pointer;
+  color: #ffffff;
+  background: none;
+  border: none;
+  transition: color 0.3s;
+}
+
+.back:hover {
+  color: #e65c50;
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>

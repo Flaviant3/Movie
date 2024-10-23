@@ -30,7 +30,7 @@
         @click="handleMovieClick(movie)"
         @delete="confirmDelete(movie.id)"
       />
-      <button v-if="filteredMovies.length === 0">Aucun film trouvé. Pensez a vous connectez!</button>
+      <button v-if="filteredMovies.length === 0" class="no-actors-found">Aucun film trouvé. Pensez a vous connectez!</button>
     </div>
 
     <Pagination
@@ -143,22 +143,47 @@ export default {
 </script>
 
 <style scoped>
-.sort-select {
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
   margin-bottom: 20px;
+  font-size: 2.5em;
+  color: #ff6f61;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.search-input,
+.sort-select,
+.add-movie-button {
+  display: block;
+  margin: 0 auto 20px auto;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1em;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus,
+.sort-select:focus {
+  border-color: #ff6f61;
+  outline: none;
 }
 
 .add-movie-button {
   background-color: #28a745;
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
   cursor: pointer;
-  font-size: 1em;
   transition: background-color 0.3s, transform 0.3s;
 }
 
@@ -179,7 +204,7 @@ export default {
 }
 
 .movie-card {
-  background-color: #fefefe;
+  background-color: #2a2a2a;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -200,17 +225,21 @@ export default {
   border-radius: 8px 8px 0 0;
 }
 
-.search-input {
-  width: 50%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
+.no-actors-found {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #ff6f61;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
