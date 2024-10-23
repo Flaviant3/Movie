@@ -232,6 +232,40 @@ h1 {
   color: #ff6f61;
 }
 
+@media (max-width: 1024px) {
+  .movies-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .movies-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .search-input,
+  .sort-select,
+  .add-movie-button {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .movies-list {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  .search-input,
+  .sort-select,
+  .add-movie-button {
+    width: 100%;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -188,6 +188,38 @@ p {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 768px) {
+  .carousel {
+    height: 60vh; /* Ajuster la hauteur du carrousel pour les écrans plus petits */
+  }
+
+  .movie-card {
+    width: 100%; /* Une seule carte par ligne sur les petits écrans */
+  }
+
+  h1 {
+    font-size: 2em; /* Réduire la taille de la police pour les petits écrans */
+  }
+
+  h2 {
+    font-size: 1.5em; /* Réduire la taille de la police pour les petits écrans */
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel {
+    height: 50vh; /* Ajuster la hauteur du carrousel pour les très petits écrans */
+  }
+
+  h1 {
+    font-size: 1.8em; /* Réduire encore la taille de la police pour les très petits écrans */
+  }
+
+  h2 {
+    font-size: 1.2em; /* Réduire encore la taille de la police pour les très petits écrans */
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

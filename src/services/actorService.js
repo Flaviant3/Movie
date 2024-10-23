@@ -25,7 +25,10 @@ export const getActors = async () => {
     return response.data['hydra:member'] || []; // Utilisez 'hydra:member' pour accéder aux acteurs
   } catch (error) {
     console.error('Erreur lors de la récupération des acteurs:', error);
-    return [];
+    if(error.response.status === 401) {
+      localStorage.removeItem('jwtToken');
+      this.router.push('/login');
+    }
   }
 };
 
