@@ -24,10 +24,10 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 :root {
-  --primary-color: #e67e22; /* Orange */
-  --secondary-color: #2ecc71; /* Green */
-  --background-color: #ecf0f1; /* Light Gray */
-  --text-color: #2c3e50; /* Dark Gray */
+  --primary-color: #e67e22;
+  --secondary-color: #2ecc71;
+  --background-color: #ecf0f1;
+  --text-color: #2c3e50;
   --border-radius: 5px;
   --transition-duration: 0.3s;
 }
@@ -46,19 +46,19 @@ button {
   padding: 10px 15px;
   border: none;
   border-radius: var(--border-radius);
-  background-color: #d35400; /* Darker orange */
+  background-color: #d35400;
   color: white;
   cursor: pointer;
   transition: background-color var(--transition-duration), transform var(--transition-duration);
 }
 
 button:disabled {
-  background-color: #bdc3c7; /* Disabled button color */
+  background-color: #bdc3c7;
   cursor: not-allowed;
 }
 
 button:hover:not(:disabled) {
-  background-color: #e67e22; /* Orange */
+  background-color: #e67e22;
   transform: scale(1.05);
 }
 

@@ -23,7 +23,7 @@ export default {
       return new Date(this.actor.dob).toLocaleDateString('fr-FR', options);
     },
     maxStars() {
-      return 5; // Nombre maximum d'étoiles
+      return 5;
     }
   },
   methods: {
@@ -31,7 +31,7 @@ export default {
       this.$router.push({ name: 'ActorDetails', params: { id: this.actor.id } });
     },
     confirmDelete() {
-      this.$emit('delete', this.actor.id); // Émettre l'événement de suppression avec l'ID de l'acteur
+      this.$emit('delete', this.actor.id);
     }
   }
 };
@@ -54,76 +54,76 @@ body {
   border-radius: 10px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  background-color: #2a2a2a; /* Dark background for modern look */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Light shadow */
+  background-color: #2a2a2a;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
   text-align: center;
-  color: #ffffff; /* White text for contrast */
+  color: #ffffff;
 }
 
 .actor-card:hover {
-  transform: translateY(-5px); /* Slight lift on hover */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .actor-image {
   width: 200px;
-  height: 200px; /* Adjusted image size */
-  object-fit: cover; /* Fill space without distorting image */
-  border-radius: 50%; /* Make image completely round */
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
   transition: transform 0.3s;
 }
 
 .actor-image:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
+  transform: scale(1.05);
 }
 
 h3 {
   font-size: 1.5em;
   margin: 10px 0;
-  color: #ff6f61; /* Vibrant color for titles */
+  color: #ff6f61;
 }
 
 p {
   margin: 5px 0;
-  color: #ddd; /* Light grey text for descriptions */
+  color: #ddd;
   line-height: 1.5;
 }
 
 .rating {
-  margin-top: 10px; /* Space above rating */
+  margin-top: 10px;
   text-align: center;
 }
 
 .star {
-  color: #555; /* Default star color */
-  font-size: 1.5em; /* Star size */
+  color: #555;
+  font-size: 1.5em;
 }
 
 .star.filled {
-  color: #ffcc00; /* Filled star color */
+  color: #ffcc00;
 }
 
 .star:hover {
   cursor: pointer;
-  color: #ffcc00; /* Hover color */
+  color: #ffcc00;
   transition: color 0.2s;
 }
 
 .delete-button {
-  background-color: #dc3545; /* Red color for delete button */
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
-  margin-top: 10px; /* Space above button */
+  margin-top: 10px;
   transition: background-color 0.3s;
 }
 
 .delete-button:hover {
-  background-color: #c82333; /* Hover color */
+  background-color: #c82333;
 }
 
 @keyframes fadeIn {

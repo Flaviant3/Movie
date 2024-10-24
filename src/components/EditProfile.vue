@@ -5,11 +5,11 @@
 
       <div class="form-container login-container">
         <form @submit.prevent="login">
-          <h1>Login</h1>
-          <span>or use your email and password to login</span>
+          <h1>Connexion</h1>
+          <span>ou utilisez votre email et mot de passe pour vous connecter</span>
           <input type="email" v-model="loginEmail" placeholder="Email" required />
-          <input type="password" v-model="loginPassword" placeholder="Password" required />
-          <button type="submit">Login</button>
+          <input type="password" v-model="loginPassword" placeholder="Mot de passe" required />
+          <button type="submit">Connexion</button>
           <a href="#" @click.prevent="showPasswordModal">Mot de passe oublié?</a>
         </form>
       </div>
@@ -18,12 +18,12 @@
 
       <div class="form-container sign-up-container">
         <form @submit.prevent="signUp">
-          <h1>Create Account</h1>
-          <span>or use your email for registration</span>
-          <input type="text" v-model="user.name" placeholder="Name" required />
+          <h1>Créer un compte</h1>
+          <span>ou utilisez votre email pour vous inscrire</span>
+          <input type="text" v-model="user.name" placeholder="Nom" required />
           <input type="email" v-model="user.email" placeholder="Email" required />
-          <input type="password" v-model="user.password" placeholder="Password" required />
-          <button type="submit">Sign Up</button>
+          <input type="password" v-model="user.password" placeholder="Mot de passe" required />
+          <button type="submit">Inscription</button>
         </form>
       </div>
     </div>
@@ -31,13 +31,13 @@
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closePasswordModal">&times;</span>
-        <button class="back" @click="closePasswordModal">Back</button>
-        <h2>Change Password</h2>
+        <button class="back" @click="closePasswordModal">Retour</button>
+        <h2>Changer le mot de passe</h2>
         <input type="email" v-model="emailForPasswordChange" placeholder="Email" required />
-        <button @click="verifyEmail">Next</button>
+        <button @click="verifyEmail">Suivant</button>
         <div v-if="userId">
-          <input type="password" v-model="newPassword" placeholder="New Password" required />
-          <button @click="changePassword">Change Password</button>
+          <input type="password" v-model="newPassword" placeholder="Nouveau mot de passe" required />
+          <button @click="changePassword">Changer le mot de passe</button>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@ export default {
       showModal: false,
       newPassword: '',
       emailForPasswordChange: '',
-      userId: null, // Pour stocker l'ID utilisateur
+      userId: null,
     };
   },
   methods: {
@@ -75,16 +75,13 @@ export default {
 
         const data = await response.json();
         if (response.ok) {
-          this.message = 'Compte créé avec succès!';
+          this.showMessage('Compte créé avec succès!');
           localStorage.setItem('userId', data.id);
-          setTimeout(() => {
-            this.message = '';
-          }, 3000);
         } else {
-          alert(data.message || 'Erreur lors de la création du compte');
+          this.showMessage(data.message || 'Erreur lors de la création du compte');
         }
       } catch (error) {
-        alert('Erreur lors de la création du compte');
+        this.showMessage('Erreur lors de la création du compte');
       }
     },
     async login() {
@@ -105,38 +102,36 @@ export default {
           localStorage.setItem('jwtToken', data.token);
           localStorage.setItem('userId', data.id);
           localStorage.setItem('name', data.username);
-          this.message = 'Connexion réussie!';
+          this.showMessage('Connexion réussie!');
           setTimeout(() => {
-            this.message = '';
             window.location.href = '/homepage';
           }, 3000);
         } else {
-          alert(data.message || 'Erreur lors de la connexion');
+          this.showMessage(data.message || 'Erreur lors de la connexion');
         }
       } catch (error) {
-        alert('Erreur lors de la connexion');
+        this.showMessage('Erreur lors de la connexion');
       }
     },
     showPasswordModal() {
       this.showModal = true;
       this.emailForPasswordChange = '';
       this.newPassword = '';
-      this.userId = null; // Réinitialiser l'ID utilisateur
+      this.userId = null;
     },
     closePasswordModal() {
       this.showModal = false;
       this.newPassword = '';
       this.emailForPasswordChange = '';
-      this.userId = null; // Réinitialiser l'ID utilisateur
+      this.userId = null;
     },
     async verifyEmail() {
       try {
         if (!this.emailForPasswordChange) {
-          alert('Veuillez entrer un email.');
+          this.showMessage('Veuillez entrer un email.');
           return;
         }
 
-        // Envoie la requête pour vérifier l'email
         const response = await fetch(`http://symfony.mmi-troyes.fr:8319/api/users?email=${encodeURIComponent(this.emailForPasswordChange)}`, {
           method: 'GET',
           headers: {
@@ -147,15 +142,15 @@ export default {
         const data = await response.json();
 
         if (response.ok && data['hydra:member'].length > 0) {
-          this.userId = data['hydra:member'][0].id; // Récupère l'ID utilisateur
-          alert(`Email trouvé : ${data['hydra:member'][0].email}`); // Affiche l'email trouvé
+          this.userId = data['hydra:member'][0].id;
+          this.showMessage(`Email trouvé : ${data['hydra:member'][0].email}`);
         } else {
-          alert('Email non trouvé. Veuillez vérifier l\'adresse entrée.');
-          this.userId = null; // Réinitialiser si l'email n'est pas trouvé
+          this.showMessage('Email non trouvé. Veuillez vérifier l\'adresse entrée.');
+          this.userId = null;
         }
       } catch (error) {
         console.error('Erreur lors de la requête:', error);
-        alert('Erreur lors de la vérification de l\'email');
+        this.showMessage('Erreur lors de la vérification de l\'email');
       }
     },
     async changePassword() {
@@ -163,7 +158,7 @@ export default {
         const token = localStorage.getItem('jwtToken');
 
         if (!this.userId) {
-          alert('ID utilisateur manquant.');
+          this.showMessage('ID utilisateur manquant.');
           return;
         }
 
@@ -177,14 +172,20 @@ export default {
 
         const data = await response.json();
         if (response.ok) {
-          alert('Mot de passe changé avec succès!');
+          this.showMessage('Mot de passe changé avec succès!');
           this.closePasswordModal();
         } else {
-          alert(data.message || 'Erreur lors du changement de mot de passe');
+          this.showMessage(data.message || 'Erreur lors du changement de mot de passe');
         }
       } catch (error) {
-        alert('Erreur lors du changement de mot de passe');
+        this.showMessage('Erreur lors du changement de mot de passe');
       }
+    },
+    showMessage(message) {
+      this.message = message;
+      setTimeout(() => {
+        this.message = '';
+      }, 3000);
     }
   }
 };
