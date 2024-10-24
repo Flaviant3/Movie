@@ -1,59 +1,62 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div>
-      <label for="title">Titre :</label>
-      <input type="text" v-model="title" required />
-    </div>
-    <div>
-      <label for="description">Description :</label>
-      <textarea v-model="description" required></textarea>
-    </div>
-    <div>
-      <label for="release_date">Date de sortie :</label>
-      <input type="date" v-model="releaseDate" required />
-    </div>
-    <div>
-      <label for="duration">Durée :</label>
-      <input type="number" v-model="duration" required />
-    </div>
-    <div>
-      <label for="entries">Entrées :</label>
-      <input type="number" v-model="entries" required />
-    </div>
-    <div>
-      <label for="director">Réalisateur :</label>
-      <input type="text" v-model="director" required />
-    </div>
-    <div>
-      <label for="rating">Note :</label>
-      <input type="number" v-model="rating" min="0" max="10" step="0.1" required />
-    </div>
-    <div>
-      <label for="media">Média :</label>
-      <input type="text" v-model="media" />
-    </div>
-    <div>
-      <label for="studio">Studio :</label>
-      <input type="text" v-model="studio" required />
-    </div>
-    <div>
-      <label for="genre">Genre :</label>
-      <input type="text" v-model="genre" required />
-    </div>
-    <div>
-      <label for="saga">Saga :</label>
-      <input type="text" v-model="saga" />
-    </div>
-    <div>
-      <label for="actors">Acteurs :</label>
-      <select v-model="selectedActors" multiple>
-        <option v-for="actor in actors" :key="actor.id" :value="actor['@id']">
-          {{ actor.lastname }}
-        </option>
-      </select>
-    </div>
-    <button type="submit">Ajouter le film</button>
-  </form>
+  <div>
+    <form @submit.prevent="submitForm">
+      <div>
+        <label for="title">Titre :</label>
+        <input type="text" v-model="title" required />
+      </div>
+      <div>
+        <label for="description">Description :</label>
+        <textarea v-model="description" required></textarea>
+      </div>
+      <div>
+        <label for="release_date">Date de sortie :</label>
+        <input type="date" v-model="releaseDate" required />
+      </div>
+      <div>
+        <label for="duration">Durée :</label>
+        <input type="number" v-model="duration" required />
+      </div>
+      <div>
+        <label for="entries">Entrées :</label>
+        <input type="number" v-model="entries" required />
+      </div>
+      <div>
+        <label for="director">Réalisateur :</label>
+        <input type="text" v-model="director" required />
+      </div>
+      <div>
+        <label for="rating">Note :</label>
+        <input type="number" v-model="rating" min="0" max="10" step="0.1" required />
+      </div>
+      <div>
+        <label for="media">Média :</label>
+        <input type="text" v-model="media" />
+      </div>
+      <div>
+        <label for="studio">Studio :</label>
+        <input type="text" v-model="studio" required />
+      </div>
+      <div>
+        <label for="genre">Genre :</label>
+        <input type="text" v-model="genre" required />
+      </div>
+      <div>
+        <label for="saga">Saga :</label>
+        <input type="text" v-model="saga" />
+      </div>
+      <div>
+        <label for="actors">Acteurs :</label>
+        <select v-model="selectedActors" multiple>
+          <option v-for="actor in actors" :key="actor.id" :value="actor['@id']">
+            {{ actor.lastname }}
+          </option>
+        </select>
+      </div>
+      <button type="submit">Ajouter le film</button>
+    </form>
+    <div v-if="message" class="notification">{{ message }}</div>
+  </div>
 </template>
 
 <script>
@@ -75,7 +78,8 @@ export default {
       genre: '',
       saga: '',
       selectedActors: [],
-      actors: []
+      actors: [],
+      message: ''
     };
   },
   created() {
@@ -94,7 +98,7 @@ export default {
       const token = localStorage.getItem('jwtToken');
 
       if (!token) {
-        alert('Vous devez être connecté pour ajouter un film.');
+        this.showMessage('Vous devez être connecté pour ajouter un film.');
         return;
       }
 
@@ -125,9 +129,10 @@ export default {
         });
         this.resetForm();
         this.$emit('close');
+        this.showMessage('Film ajouté avec succès !');
       } catch (error) {
         console.error('Erreur lors de l\'ajout du film:', error.response.data);
-        alert('Une erreur est survenue lors de l\'ajout du film.');
+        this.showMessage('Une erreur est survenue lors de l\'ajout du film.');
       }
     },
     resetForm() {
@@ -143,6 +148,12 @@ export default {
       this.genre = '';
       this.saga = '';
       this.selectedActors = [];
+    },
+    showMessage(message) {
+      this.message = message;
+      setTimeout(() => {
+        this.message = '';
+      }, 3000);
     }
   }
 };
@@ -216,5 +227,27 @@ button[type="submit"]:hover {
 
 button[type="submit"]:focus {
   outline: none;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #ff6f61;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  animation: slideInFromTop 0.5s ease-in-out;
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

@@ -45,6 +45,8 @@
       @confirm="deleteMovie(selectedMovieId)"
       @cancel="isConfirmationVisible = false"
     />
+
+    <div v-if="message" class="notification">{{ message }}</div>
   </div>
 </template>
 
@@ -71,7 +73,8 @@ export default {
       selectedMovieId: null,
       currentPage: 1,
       moviesPerPage: 30, // Nombre de films à afficher par page
-      sortCriteria: 'title' // Critère de tri par défaut
+      sortCriteria: 'title', // Critère de tri par défaut
+      message: ''
     };
   },
   async created() {
@@ -88,10 +91,10 @@ export default {
       try {
         const addedMovie = await addMovie(newMovie);
         this.movies.push(addedMovie);
-        alert('Film ajouté avec succès !');
+        this.showMessage('Film ajouté avec succès !');
       } catch (error) {
         console.error('Erreur lors de l\'ajout du film:', error.response ? error.response.data : error);
-        alert('Erreur lors de l\'ajout du film. Veuillez vérifier les données et réessayer.');
+        this.showMessage('Erreur lors de l\'ajout du film. Veuillez vérifier les données et réessayer.');
       }
     },
     confirmDelete(movieId) {
@@ -103,14 +106,20 @@ export default {
         await deleteMovie(movieId);
         this.movies = this.movies.filter(movie => movie.id !== movieId);
         this.isConfirmationVisible = false;
-        alert('Film supprimé avec succès !'); // Alerte de succès
+        this.showMessage('Film supprimé avec succès !');
       } catch (error) {
-        alert('Erreur lors de la suppression du film. Veuillez réessayer.');
-        console.error('Erreur:', error); // Affichage de l'erreur dans la console
+        this.showMessage('Erreur lors de la suppression du film. Veuillez réessayer.');
+        console.error('Erreur:', error);
       }
     },
     updatePage(newPage) {
       this.currentPage = newPage;
+    },
+    showMessage(message) {
+      this.message = message;
+      setTimeout(() => {
+        this.message = '';
+      }, 3000);
     }
   },
   computed: {
@@ -232,6 +241,17 @@ h1 {
   color: #ff6f61;
 }
 
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #ff6f61;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  animation: slideInFromTop 0.5s ease-in-out;
+}
+
 @media (max-width: 1024px) {
   .movies-list {
     grid-template-columns: repeat(3, 1fr);
@@ -270,6 +290,17 @@ h1 {
   from {
     opacity: 0;
     transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
   }
   to {
     opacity: 1;

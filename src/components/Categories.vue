@@ -29,6 +29,8 @@
       @confirm="deleteCategory(selectedCategoryId)"
       @cancel="isConfirmationVisible = false"
     />
+
+    <div v-if="message" class="notification">{{ message }}</div>
   </div>
 </template>
 
@@ -51,7 +53,8 @@ export default {
       selectedCategoryId: null,
       categoryTitle: '',
       isEditing: false,
-      editingCategoryId: null
+      editingCategoryId: null,
+      message: ''
     };
   },
   computed: {
@@ -86,10 +89,10 @@ export default {
         const addedCategory = await addCategory(newCategory);
         this.categories.push(addedCategory);
         this.isAddCategoryVisible = false;
-        alert('Catégorie ajoutée avec succès !');
+        this.showMessage('Catégorie ajoutée avec succès !');
       } catch (error) {
         console.error('Erreur lors de l\'ajout de la catégorie:', error.response ? error.response.data : error);
-        alert('Erreur lors de l\'ajout de la catégorie. Veuillez vérifier les données et réessayer.');
+        this.showMessage('Erreur lors de l\'ajout de la catégorie. Veuillez vérifier les données et réessayer.');
       }
     },
     async updateCategory() {
@@ -99,10 +102,10 @@ export default {
         const index = this.categories.findIndex(category => category.id === this.editingCategoryId);
         this.categories[index].title = this.categoryTitle;
         this.isAddCategoryVisible = false;
-        alert('Catégorie modifiée avec succès !');
+        this.showMessage('Catégorie modifiée avec succès !');
       } catch (error) {
         console.error('Erreur lors de la modification de la catégorie:', error.response ? error.response.data : error);
-        alert('Erreur lors de la modification de la catégorie. Veuillez vérifier les données et réessayer.');
+        this.showMessage('Erreur lors de la modification de la catégorie. Veuillez vérifier les données et réessayer.');
       }
     },
     confirmDelete(categoryId) {
@@ -114,9 +117,9 @@ export default {
         await deleteCategory(categoryId);
         this.categories = this.categories.filter(category => category.id !== categoryId);
         this.isConfirmationVisible = false;
-        alert('Catégorie supprimée avec succès !');
+        this.showMessage('Catégorie supprimée avec succès !');
       } catch (error) {
-        alert('Erreur lors de la suppression de la catégorie. Veuillez réessayer.');
+        this.showMessage('Erreur lors de la suppression de la catégorie. Veuillez réessayer.');
         console.error('Erreur:', error);
       }
     },
@@ -130,6 +133,12 @@ export default {
       this.isAddCategoryVisible = false;
       this.isEditing = false;
       this.categoryTitle = '';
+    },
+    showMessage(message) {
+      this.message = message;
+      setTimeout(() => {
+        this.message = '';
+      }, 3000);
     }
   },
   mounted() {
@@ -214,40 +223,52 @@ h1 {
 
 .categories-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
   padding: 20px;
 }
 
-@media (max-width: 1024px) {
-  .categories-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.category-card {
+  background-color: #2a2a2a;
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.notification {
+  background-color: #ff6f61;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideInFromTop 0.5s ease-in-out;
 }
 
 @media (max-width: 768px) {
-  .categories-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .search-input,
-  .add-category-button {
+  .search-input {
     width: 90%;
   }
 }
 
 @media (max-width: 480px) {
-  .categories-list {
-    grid-template-columns: 1fr;
+  .search-input {
+    width: 100%;
   }
 
   h1 {
     font-size: 2em;
-  }
-
-  .search-input,
-  .add-category-button {
-    width: 100%;
   }
 }
 
@@ -255,6 +276,17 @@ h1 {
   from {
     opacity: 0;
     transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
   }
   to {
     opacity: 1;
