@@ -62,7 +62,7 @@ export default {
       isConfirmationVisible: false,
       selectedActorId: null,
       currentPage: 1,
-      actorsPerPage: 10 // Nombre d'acteurs à afficher par page
+      actorsPerPage: 10
     };
   },
   async created() {

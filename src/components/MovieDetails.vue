@@ -87,8 +87,8 @@ import { updateMovie as movieServiceUpdate } from "../services/movieService";
 export default {
   data() {
     return {
-      movie: {}, // Remplir avec les détails du film
-      isEditing: false // État pour gérer l'édition
+      movie: {},
+      isEditing: false
     };
   },
   methods: {
@@ -100,11 +100,10 @@ export default {
         const movieDetails = await fetchMovieDetails(movieId);
         this.movie = movieDetails;
 
-        // Récupérer les détails des acteurs
         if (this.movie.actors && this.movie.actors.length > 0) {
           const actorPromises = this.movie.actors.map(actorUrl => fetchActorDetails(actorUrl));
           const actorsDetails = await Promise.all(actorPromises);
-          this.movie.actors = actorsDetails; // Remplacez les URLs par les détails des acteurs
+          this.movie.actors = actorsDetails;
         }
       } catch (error) {
         console.error('Erreur lors du chargement des détails du film:', error);
@@ -114,7 +113,7 @@ export default {
       try {
         this.movie.rating = parseFloat(this.movie.rating);
         await movieServiceUpdate(this.movie.id, this.movie);
-        this.isEditing = false; // Fermer le mode édition après la sauvegarde
+        this.isEditing = false;
       } catch (error) {
         if (error.response) {
           console.error('Erreur lors de la mise à jour du film:', error.response.data);
@@ -128,7 +127,7 @@ export default {
   },
   created() {
     const movieId = this.$route.params.id;
-    this.loadMovieDetails(movieId); // Charger les détails du film lors de la création du composant
+    this.loadMovieDetails(movieId);
   }
 };
 </script>
@@ -138,11 +137,11 @@ export default {
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
-  background-color: #141414; /* Fond sombre */
+  background-color: #141414;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   font-family: 'Arial', sans-serif;
-  color: #ffffff; /* Texte blanc */
+  color: #ffffff;
 }
 
 .movie-image {
@@ -151,20 +150,20 @@ export default {
   border-radius: 10px;
   margin-bottom: 20px;
   display: block;
-  border: 2px solid #e50914; /* Bordure rouge Netflix */
+  border: 2px solid #e50914;
   object-fit: cover;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 h3 {
   font-size: 2rem;
-  color: #e50914; /* Rouge Netflix */
+  color: #e50914;
   margin-bottom: 10px;
   text-align: center;
 }
 
 .info-section {
-  background-color: #222; /* Fond sombre pour la section info */
+  background-color: #222;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
@@ -172,7 +171,7 @@ h3 {
 }
 
 .edit-form {
-  background-color: #222; /* Fond sombre pour le formulaire */
+  background-color: #222;
   border-radius: 8px;
   padding: 20px;
   margin-bottom: 20px;
@@ -194,36 +193,36 @@ h3 {
 }
 
 .save-button {
-  background-color: #007bff; /* Bleu */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
-  margin-top: 10px; /* Espace au-dessus du bouton */
+  margin-top: 10px;
 }
 
 .save-button:hover {
-  background-color: #0056b3; /* Couleur plus foncée au survol */
+  background-color: #0056b3;
 }
 
 .cancel-button {
-  background-color: #dc3545; /* Rouge */
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
-  margin-left: 10px; /* Espace à gauche */
+  margin-left: 10px;
 }
 
 .cancel-button:hover {
-  background-color: #c82333; /* Couleur plus foncée au survol */
+  background-color: #c82333;
 }
 
 h2 {
   font-size: 1.5rem;
-  color: #e50914; /* Rouge Netflix */
+  color: #e50914;
   margin-bottom: 10px;
   text-align: center;
 }
@@ -236,30 +235,30 @@ h2 {
 }
 
 .actor-card {
-  flex: 1 1 calc(30% - 15px); /* 3 cards par ligne */
-  background-color: #333; /* Fond sombre pour les cartes d'acteurs */
+  flex: 1 1 calc(30% - 15px);
+  background-color: #333;
   border-radius: 8px;
   padding: 10px;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  transition: transform 0.2s, box-shadow 0.2s; /* Ajout d'une transition */
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .actor-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8); /* Ombre plus prononcée au survol */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
 }
 
 .actor-card img {
-  width: 100px; /* Ajustement de la taille de l'image */
+  width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e50914; /* Bordure rouge Netflix */
+  border: 2px solid #e50914;
 }
 
 .notification {
-  background-color: #4caf50; /* Vert */
+  background-color: #4caf50;
   color: white;
   padding: 15px;
   margin: 10px 0;

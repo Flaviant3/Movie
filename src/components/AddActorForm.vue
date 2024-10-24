@@ -65,7 +65,7 @@ export default {
       nationality: '',
       media: '',
       gender: '',
-      actors: [] // Add the actors property here
+      actors: []
     };
   },
   created() {
@@ -98,7 +98,7 @@ export default {
           nationality: this.nationality,
           media: this.media,
           gender: this.gender,
-          created_at: new Date().toISOString().split('T')[0] // Assuming created_at is the current date
+          created_at: new Date().toISOString().split('T')[0]
         };
 
         try {
