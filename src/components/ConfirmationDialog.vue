@@ -1,6 +1,6 @@
 <template>
   <div class="confirmation-dialog">
-    <p>Êtes-vous sûr de vouloir supprimer ce film ?</p>
+    <p>Êtes-vous sûr de vouloir supprimer ?</p>
     <button @click="$emit('confirm')">Oui</button>
     <button @click="$emit('cancel')">Non</button>
   </div>

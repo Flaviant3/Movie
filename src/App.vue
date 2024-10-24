@@ -156,6 +156,32 @@ nav:hover {
   color: #ff6f61;
 }
 
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .edit-profile, .logout {
+    width: 100%;
+    text-align: center;
+    margin: 5px 0;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

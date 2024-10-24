@@ -17,13 +17,20 @@
 
     <div class="actors-list">
       <ActorCard
-        v-for="actor in filteredActors"
+        v-for="actor in paginatedActors"
         :key="actor.id"
         :actor="actor"
         @click="handleActorClick(actor)"
         @delete="confirmDelete(actor.id)"
       />
     </div>
+
+    <Pagination
+      v-if="totalPages > 1"
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      @onPageChange="updatePage"
+    />
 
     <PopinConfirmation
       v-if="isConfirmationVisible"
@@ -38,12 +45,14 @@ import { getActors, addActor, deleteActor } from '../services/actorService';
 import ActorCard from './ActorCard.vue';
 import AddActorForm from './AddActorForm.vue';
 import PopinConfirmation from './PopinConfirmation.vue';
+import Pagination from './Pagination.vue';
 
 export default {
   components: {
     ActorCard,
     AddActorForm,
-    PopinConfirmation
+    PopinConfirmation,
+    Pagination
   },
   data() {
     return {
@@ -51,7 +60,9 @@ export default {
       searchQuery: '',
       isAddActorVisible: false,
       isConfirmationVisible: false,
-      selectedActorId: null
+      selectedActorId: null,
+      currentPage: 1,
+      actorsPerPage: 10
     };
   },
   async created() {
@@ -62,6 +73,14 @@ export default {
       return this.actors.filter(actor => {
         return actor.lastname.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
+    },
+    paginatedActors() {
+      const start = (this.currentPage - 1) * this.actorsPerPage;
+      const end = start + this.actorsPerPage;
+      return this.filteredActors.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredActors.length / this.actorsPerPage);
     }
   },
   methods: {
@@ -95,6 +114,9 @@ export default {
         alert('Erreur lors de la suppression de l\'acteur. Veuillez réessayer.');
         console.error('Erreur:', error);
       }
+    },
+    updatePage(newPage) {
+      this.currentPage = newPage;
     }
   }
 };

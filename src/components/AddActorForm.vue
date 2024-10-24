@@ -65,6 +65,7 @@ export default {
       nationality: '',
       media: '',
       gender: '',
+      actors: []
     };
   },
   created() {
@@ -96,7 +97,8 @@ export default {
           bio: this.bio,
           nationality: this.nationality,
           media: this.media,
-          gender: this.gender
+          gender: this.gender,
+          created_at: new Date().toISOString().split('T')[0]
         };
 
         try {

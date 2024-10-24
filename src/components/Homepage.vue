@@ -87,7 +87,7 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #1a1a1a; /* Fond sombre */
+  background-color: #1a1a1a;
   font-family: 'Roboto', sans-serif;
   animation: fadeIn 1s ease-in-out;
 }
@@ -96,24 +96,24 @@ h1 {
   text-align: center;
   margin-bottom: 20px;
   font-size: 2.5em;
-  color: #ff6f61; /* Couleur vive */
+  color: #ff6f61;
   animation: slideInFromLeft 1s ease-in-out;
 }
 
 h2 {
   font-size: 1.8em;
   margin-bottom: 10px;
-  color: #ff6f61; /* Couleur vive */
+  color: #ff6f61;
   animation: slideInFromRight 1s ease-in-out;
 }
 
 .carousel {
   position: relative;
   overflow: hidden;
-  height: 80vh; /* Ajuster la hauteur du carrousel */
+  height: 80vh;
   border-radius: 10px;
   margin-bottom: 20px;
-  background-color: #2a2a2a; /* Fond sombre pour le carrousel */
+  background-color: #2a2a2a;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   animation: fadeIn 1s ease-in-out;
 }
@@ -150,20 +150,20 @@ h2 {
 h3 {
   font-size: 1.5em;
   margin: 10px 0;
-  color: #ffffff; /* Texte blanc pour le titre du film */
+  color: #ffffff;
   text-align: center;
 }
 
 p {
   margin: 5px 0;
-  color: #dddddd; /* Texte gris clair pour les descriptions */
+  color: #dddddd;
   line-height: 1.5;
   text-align: center;
 }
 
 .actors-section {
   padding: 20px;
-  background-color: #2a2a2a; /* Fond sombre pour la section des acteurs */
+  background-color: #2a2a2a;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   animation: fadeIn 1s ease-in-out;
@@ -177,15 +177,47 @@ p {
 
 .actor-card {
   margin-right: 10px;
-  background-color: #333; /* Fond sombre pour les cartes d'acteurs */
+  background-color: #333;
   border-radius: 5px;
   padding: 10px;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .actor-card:hover {
-  transform: scale(1.05); /* Effet de zoom au survol */
+  transform: scale(1.05);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    height: 60vh;
+  }
+
+  .movie-card {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel {
+    height: 50vh;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
 }
 
 @keyframes fadeIn {
