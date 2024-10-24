@@ -2,7 +2,7 @@
   <div class="popin">
     <div class="popin-content">
       <h3>Confirmer la suppression</h3>
-      <p>Êtes-vous sûr de vouloir supprimer ce film ?</p>
+      <p>Êtes-vous sûr de vouloir supprimer ?</p>
       <button @click="$emit('confirm')">Confirmer</button>
       <button @click="$emit('cancel')">Annuler</button>
     </div>
