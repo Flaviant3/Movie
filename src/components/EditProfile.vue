@@ -99,6 +99,7 @@ export default {
 
         const data = await response.json();
         if (response.ok) {
+          console.log('Token reçu:', data.token); // Log du token reçu
           localStorage.setItem('jwtToken', data.token);
           localStorage.setItem('userId', data.id);
           localStorage.setItem('name', data.username);
@@ -167,7 +168,7 @@ export default {
           headers: {
             'Content-Type': 'application/merge-patch+json',
           },
-          body: JSON.stringify({ password: this.newPassword }),
+          body: JSON.stringify({password: this.newPassword}),
         });
 
         const data = await response.json();
