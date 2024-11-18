@@ -71,11 +71,11 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps  # Utilisation de --legacy-peer-deps
+        run: npm install --legacy-peer-deps
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           start: npm start
-          wait-on: 'http://localhost:3000'  # Ajustez selon votre application
+          wait-on: 'http://localhost:3000'
           wait-on-timeout: 60
