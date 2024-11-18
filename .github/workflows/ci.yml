@@ -34,7 +34,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps  # Ou --force si nécessaire
+        run: npm install --legacy-peer-deps  # Utilisation de --legacy-peer-deps
 
       - name: Build the project
         run: npm run build  # Remplacez par votre commande de build
@@ -71,7 +71,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps  # Utilisation de --legacy-peer-deps
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
