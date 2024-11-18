@@ -1,15 +1,18 @@
-name: CI
+name: CI/CD
 
 on:
   push:
     branches:
-      - develop
       - main
+      - master
+      - develop
       - feature/*
   pull_request:
     branches:
-      - develop
       - main
+      - master
+      - develop
+      - feature/*
 
 jobs:
   build:
@@ -37,8 +40,42 @@ jobs:
         run: npm run build  # Remplacez par votre commande de build
 
       - name: Run tests
-        run: npm test  # Remplacez par votre commande de tes
+        run: npm test  # Remplacez par votre commande de test
 
-      - name: Deploy
-        run: |
-          echo "Déployer votre application ici"
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v0.2.1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "dist/"
+          target: "/var/www/html/"
+
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm start
+          wait-on: 'http://localhost:3000'  # Ajustez selon votre application
+          wait-on-timeout: 60
