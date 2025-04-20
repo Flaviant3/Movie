@@ -11,7 +11,7 @@
     "test": "echo 'No tests specified' && exit 0"
   },
   "dependencies": {
-    "@vitejs/plugin-legacy": "^5.4.3",
+    "@vitejs/plugin-legacy": "^6.1.0",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue2": "^2.3.1",
     "axios": "^1.7.7",
